@@ -1,6 +1,6 @@
 import { createNanoEvents, Unsubscribe } from 'nanoevents';
 
-export type Event<TData = any, TSource extends EventSource = EventSource> = TData & {
+export type Event<TData = any, TSource extends EventSource = any> = TData & {
     source: TSource;
 };
 
@@ -37,10 +37,6 @@ export default class EventSource<TEvents extends EventMap = EventMap>
         this.emitter.emit(event, ...data);
     }
 
-    static foo() {
-
-        return 'bar';
-    }
 }
 
 

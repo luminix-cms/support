@@ -30,16 +30,14 @@ export type MacroableInterface<TMacros extends MacroMethodMap> = {
 };
 
 export type MacroableOf<TBase extends Constructor, TMacros extends MacroMethodMap> = Omit<TBase, 'new'> & {
-    new (...args: ConstructorParameters<TBase>): InstanceType<TBase> & TMacros & MacroableInterface<TMacros>; /* & {
-        [key: string]: (...args: any[]) => any;
-    };*/
+    new (...args: ConstructorParameters<TBase>): InstanceType<TBase> & TMacros & MacroableInterface<TMacros>;
 };
 
 export default function Macroable<TMacros extends MacroMethodMap, TBase extends Constructor>(
     Base: TBase
 ): MacroableOf<TBase, TMacros>
 {
-    return class MacroableBase extends Base {
+    return class extends Base {
 
         _macros: TMacros = {} as TMacros;
 

@@ -79,6 +79,23 @@ export default class Client {
         return this;
     }
 
+    withData(data: object): this {
+        const rawCurrentData = Obj.get(this.options, 'data', {});
+        const currentData = rawCurrentData instanceof FormData
+            ? Obj.fromFormData(rawCurrentData)
+            : rawCurrentData;
+        
+        Obj.set(this.options, 'data', this.parseData(Obj.merge(currentData, data)));
+
+        return this;
+    }
+
+    replaceData(data: object): this {
+        Obj.set(this.options, 'data', this.parseData(data));
+
+        return this;
+    }
+
     withBasicAuth(username: string, password: string): this {
         Obj.set(this.options, 'headers.Authorization', `Basic ${btoa(`${username}:${password}`)}`);
 

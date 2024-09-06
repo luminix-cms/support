@@ -47,9 +47,7 @@ export type ReducibleInterface<TReducers extends ReducerMethodMap> = {
 };
 
 export type ReducibleOf<TBase extends Constructor, TReducers extends ReducerMethodMap> = Omit<TBase, 'new'> & {
-    new (...args: ConstructorParameters<TBase>): InstanceType<TBase> & TReducers & ReducibleInterface<TReducers>; /* & {
-        [key: string]: (value: any, ...args: any[]) => any;
-    };*/
+    new (...args: ConstructorParameters<TBase>): InstanceType<TBase> & TReducers & ReducibleInterface<TReducers>;
 };
 
 export default function Reducible<TReducers extends ReducerMethodMap, TBase extends Constructor>(Base: TBase): ReducibleOf<TBase, TReducers> {

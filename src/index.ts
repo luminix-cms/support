@@ -1,7 +1,8 @@
 import * as Arr from './Arr';
 import Collection from './Collection';
 import EventSource from './Contracts/EventSource';
-import Http from './Http';
+import Http from './Http/index';
+import PropertyBag from './PropertyBag';
 import Reducible from './Mixins/Reducible';
 import Macroable from './Mixins/Macroable';
 import * as Obj from './Obj';
@@ -14,6 +15,7 @@ export {
     Collection,
     EventSource,
     Http,
+    PropertyBag,
     Reducible,
     Macroable,
     Obj,
