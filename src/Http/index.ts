@@ -86,5 +86,11 @@ class HttpStatic {
 
 const Http = new (Macroable<Record<string, () => Client>, typeof HttpStatic>(HttpStatic))();
 
+export {
+    Client,
+    Response,
+    Request,
+};
+
 export default Http;
 
