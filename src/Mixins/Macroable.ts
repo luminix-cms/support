@@ -1,9 +1,9 @@
 
 import { Constructor } from "../Js";
 
-export type MacroRepository = Record<string, (...args: any[]) => any>;
+export type MacroMethodMap = Record<string, (...args: any[]) => any>;
 
-export type MacroableInterface<TMacros extends MacroRepository> = {
+export type MacroableInterface<TMacros extends MacroMethodMap> = {
     /**
      * 
      * Register a custom macro
@@ -29,13 +29,13 @@ export type MacroableInterface<TMacros extends MacroRepository> = {
     flushMacros(): void;
 };
 
-export type MacroableOf<TBase extends Constructor, TMacros extends MacroRepository> = Omit<TBase, 'new'> & {
-    new (...args: ConstructorParameters<TBase>): InstanceType<TBase> & TMacros & MacroableInterface<TMacros> & {
+export type MacroableOf<TBase extends Constructor, TMacros extends MacroMethodMap> = Omit<TBase, 'new'> & {
+    new (...args: ConstructorParameters<TBase>): InstanceType<TBase> & TMacros & MacroableInterface<TMacros>; /* & {
         [key: string]: (...args: any[]) => any;
-    };
+    };*/
 };
 
-export default function Macroable<TMacros extends MacroRepository, TBase extends Constructor>(
+export default function Macroable<TMacros extends MacroMethodMap, TBase extends Constructor>(
     Base: TBase
 ): MacroableOf<TBase, TMacros>
 {
