@@ -1,28 +1,47 @@
 import * as _ from "lodash-es";
 
+export function after(string: string, search: string): string {
+    if (!string.includes(search)) {
+        return '';
+    }
+    return string.split(search).slice(1).join('');
+}
 
-export function camelCase(string: string): string {
+export function afterLast(string: string, search: string): string {
+    if (!string.includes(search)) {
+        return '';
+    }
+    return string.split(search).slice(-1).join('');
+}
+
+export function before(string: string, search: string): string {
+    if (!string.includes(search)) {
+        return '';
+    }
+    return string.split(search).slice(0, 1).join('');
+}
+
+export function beforeLast(string: string, search: string): string {
+    if (!string.includes(search)) {
+        return '';
+    }
+    return string.split(search).slice(0, -1).join('');
+}
+
+export function camel(string: string): string {
     return _.camelCase(string);
 }
 
-export function endsWith(string: string, suffix: string): boolean {
-    return _.endsWith(string, suffix);
-}
-
-export function kebabCase(string: string): string {
+export function kebab(string: string): string {
     return _.kebabCase(string);
 }
 
-export function pascalCase(string: string): string {
-    return _.upperFirst(camelCase(string));
+export function studly(string: string): string {
+    return _.upperFirst(camel(string));
 }
 
-export function snakeCase(string: string): string {
+export function snake(string: string): string {
     return _.snakeCase(string);
-}
-
-export function startsWith(string: string, prefix: string): boolean {
-    return _.startsWith(string, prefix);
 }
 
 export function trim(string: string, chars?: string): string {

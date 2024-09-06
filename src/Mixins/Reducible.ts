@@ -29,7 +29,7 @@ export type ReducibleInterface = {
 
 export function Reducible<T extends Constructor>(Base: T) {
     return class extends Base {
-        reducers: {
+        _reducers: {
             [name: string]: Collection<Reducer> // Reducer[]
         } = {};
 
@@ -41,7 +41,7 @@ export function Reducible<T extends Constructor>(Base: T) {
                         return Reflect.get(target, prop, receiver);
                     }
                     return (value: unknown, ...args: unknown[]) => {
-                        const { [prop]: macros = new Collection<Reducer>() } = target.reducers;
+                        const { [prop]: macros = new Collection<Reducer>() } = target._reducers;
 
                         if (isDraftable(value)) {
                             return produce(value, (draft: unknown) => {
@@ -64,40 +64,40 @@ export function Reducible<T extends Constructor>(Base: T) {
             if (name in this) {
                 throw new ReducerOverrideException(name, this);
             }
-            if (!this.reducers[name]) {
-                this.reducers[name] = new Collection<Reducer>();
+            if (!this._reducers[name]) {
+                this._reducers[name] = new Collection<Reducer>();
             }
 
-            this.reducers[name].push({ callback, priority });
+            this._reducers[name].push({ callback, priority });
 
             return () => this.removeReducer(name, callback);
         }
 
         removeReducer(name: string, callback: ReducerCallback) {
-            const index = this.reducers[name].search((reducer) => reducer.callback === callback);
+            const index = this._reducers[name].search((reducer) => reducer.callback === callback);
             if (index === false) {
                 return;
             }
-            this.reducers[name].pull(index);
+            this._reducers[name].pull(index);
         }
 
         getReducer(name: string): Collection<Reducer> {
-            if (!this.reducers[name]) {
-                this.reducers[name] = new Collection<Reducer>();
+            if (!this._reducers[name]) {
+                this._reducers[name] = new Collection<Reducer>();
             }
-            return this.reducers[name];
+            return this._reducers[name];
         }
 
         hasReducer(name: string): boolean {
-            return !!this.reducers[name] && this.reducers[name].count() > 0;
+            return !!this._reducers[name] && this._reducers[name].count() > 0;
         }
 
         clearReducer(name: string) {
-            this.reducers[name].splice(0, this.reducers[name].count());
+            this._reducers[name].splice(0, this._reducers[name].count());
         }
 
         flushReducers() {
-            Object.values(this.reducers).forEach((collection) => collection.splice(0, collection.count()));
+            Object.values(this._reducers).forEach((collection) => collection.splice(0, collection.count()));
         }
     };
 }

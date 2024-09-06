@@ -5,7 +5,7 @@ import * as _ from 'lodash-es';
 export type JsonProperty = null | boolean | number | string;
 
 
-export function fromSearchParams(searchParams: URLSearchParams): Record<string, any> {
+export function fromQuery(searchParams: URLSearchParams): Record<string, any> {
     const object: Record<string, string> = {};
 
     for (const [key, value] of searchParams.entries()) {
@@ -16,7 +16,7 @@ export function fromSearchParams(searchParams: URLSearchParams): Record<string, 
 }
 
 export function fromFormData(formData: FormData): Record<string, any> {
-    return fromSearchParams(formData as unknown as URLSearchParams);
+    return fromQuery(formData as unknown as URLSearchParams);
 }
 
 export function get(object: any, path: string, defaultValue?: any): any {
@@ -53,7 +53,7 @@ export function set(object: any, path: string, value: any): void {
     _.set(object, path, value);
 }
 
-export function toSearchParams(object: any): URLSearchParams {
+export function toQuery(object: any): URLSearchParams {
     return toPlatformData(object, new URLSearchParams()) as URLSearchParams;
 }
 

@@ -2,6 +2,7 @@ import EventSource, { Event } from "./Contracts/EventSource";
 import * as Arr from './Arr';
 import * as Obj from './Obj';
 import { Constructor, TypeOf } from "./Js";
+import { Operator } from "./Query";
 
 const emitChange = (collection: Collection<any>) => {
     collection.emit('change', {
@@ -18,12 +19,11 @@ const get = <T>(arrayOrCollection: T[] | Collection<T>, index: number): T | null
     return arrayOrCollection.get(index);
 };
 
-export type CollectionChangeEvent<T> = { items: T[] }; 
+export type CollectionChanged<T> = { items: T[] }; 
 
-export type Operator = '=' | '!=' | '>' | '>=' | '<' | '<=';
 
 export type CollectionEvents<T> = {
-    'change': (e: Event<CollectionChangeEvent<T>, Collection<T>>) => void;
+    'change': (e: Event<CollectionChanged<T>, Collection<T>>) => void;
 };
 
 export type CollectionIteratorCallback<T = unknown, R = void> = (value: T, index: number, collection: Collection<T>) => R;
