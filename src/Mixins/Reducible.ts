@@ -7,31 +7,55 @@ import { Constructor } from '../Js';
 import Collection from '../Collection';
 import ReducerOverrideException from '../Exceptions/ReducerOverrideException';
 
-export type ReducerCallback = (value: any, ...params: any[]) => any;
+export type ReducerRepository = {
+    [reducer: string]: Collection<Reducer<any, any[]>>;
+};
 
-export interface Reducer {
-    callback: ReducerCallback,
+export type ReducerCallback<TValue = any, TParams extends any[] = any[]> = (value: TValue, ...params: TParams) => TValue;
+
+export interface Reducer<TValue = any, TParams extends any[] = any[]> {
+    callback: ReducerCallback<TValue, TParams>,
     priority: number,
 }
 
 export type Unsubscribe = () => void;
 
-export type ReducibleInterface = {
-    reducer(name: string, callback: ReducerCallback, priority?: number): Unsubscribe;
-    removeReducer(name: string, callback: ReducerCallback): void;
-    getReducer(name: string): Collection<Reducer>;
+export type ReducerMethods = Record<string, (value: any, ...params: any[]) => any>;
+
+// type TestParameters = [string, number, boolean, number, object];
+
+type First<T extends any[]> = T extends [infer A, ...any] ? A : unknown;
+type Tail<T extends any[]> = T extends [any, ...infer R] ? R : unknown[];
+
+export type ReducerCallbackFor<
+    TReducers extends ReducerMethods,
+    K extends keyof TReducers
+> = ReducerCallback<First<Parameters<TReducers[K]>>, Tail<Parameters<TReducers[K]>>>;
+
+export type ReducerFor<
+    TReducers extends ReducerMethods,
+    K extends keyof TReducers
+> = Reducer<First<Parameters<TReducers[K]>>, Tail<Parameters<TReducers[K]>>>;
+
+export type ReducibleInterface<TReducers extends ReducerMethods> = {
+
+    reducer<K extends keyof TReducers>(name: K, callback: ReducerCallbackFor<TReducers, K>, priority?: number): Unsubscribe;
+    removeReducer<K extends keyof TReducers>(name: K, callback: ReducerCallbackFor<TReducers, K>): void;
+    getReducer<K extends keyof TReducers>(name: K): Collection<ReducerFor<TReducers, K>>;
     hasReducer(name: string): boolean;
     clearReducer(name: string): void;
     flushReducers(): void;
-    [reducer: string]: unknown;
 };
 
+export type ReducibleOf<TBase extends Constructor, TReducers extends ReducerMethods> = Omit<TBase, 'new'> & {
+    new (...args: ConstructorParameters<TBase>): InstanceType<TBase> & TReducers & ReducibleInterface<TReducers> & {
+        [key: string]: (...args: any[]) => any;
+    };
+};
 
-export function Reducible<T extends Constructor>(Base: T) {
+export function Reducible<TReducers extends ReducerMethods, TBase extends Constructor>(Base: TBase): ReducibleOf<TBase, TReducers> {
     return class extends Base {
-        _reducers: {
-            [name: string]: Collection<Reducer> // Reducer[]
-        } = {};
+        _reducers: ReducerRepository = {};
 
         constructor(...args: any[]) {
             super(...args);
@@ -41,17 +65,17 @@ export function Reducible<T extends Constructor>(Base: T) {
                         return Reflect.get(target, prop, receiver);
                     }
                     return (value: unknown, ...args: unknown[]) => {
-                        const { [prop]: macros = new Collection<Reducer>() } = target._reducers;
+                        const { [prop]: reducers = new Collection<Reducer>() } = target._reducers;
 
                         if (isDraftable(value)) {
                             return produce(value, (draft: unknown) => {
-                                return macros
+                                return reducers
                                     .sortBy('priority')
                                     .reduce((prevValue, item) => item.callback(prevValue, ...args), draft);
                             });
                         }
     
-                        return macros
+                        return reducers
                             .sortBy('priority')
                             .reduce((prevValue, item) => item.callback(prevValue, ...args), value);
                     };
@@ -99,6 +123,6 @@ export function Reducible<T extends Constructor>(Base: T) {
         flushReducers() {
             Object.values(this._reducers).forEach((collection) => collection.splice(0, collection.count()));
         }
-    };
+    } as any;
 }
 

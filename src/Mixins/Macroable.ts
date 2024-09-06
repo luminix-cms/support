@@ -15,12 +15,6 @@ export type MacroableInterface<TMacros extends MacroRepository> = {
 
     /**
      * 
-     * Mix another object into the class
-     * 
-     */
-
-    /**
-     * 
      * Checks if a macro is registered
      * 
      * @param name
@@ -35,7 +29,7 @@ export type MacroableInterface<TMacros extends MacroRepository> = {
     flushMacros(): void;
 };
 
-export type MacroableOf<TBase extends Constructor, TMacros extends MacroRepository> = {
+export type MacroableOf<TBase extends Constructor, TMacros extends MacroRepository> = Omit<TBase, 'new'> & {
     new (...args: ConstructorParameters<TBase>): InstanceType<TBase> & TMacros & MacroableInterface<TMacros> & {
         [key: string]: (...args: any[]) => any;
     };
@@ -62,7 +56,7 @@ export default function Macroable<TMacros extends MacroRepository, TBase extends
                         return target._macros[prop].bind(target);
                     }
 
-                    return undefined;
+                    return Reflect.get(target, prop, receiver);
                 },
             });
         }

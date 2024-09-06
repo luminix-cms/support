@@ -36,6 +36,11 @@ export default class EventSource<TEvents extends EventMap = EventMap>
     {
         this.emitter.emit(event, ...data);
     }
+
+    static foo() {
+
+        return 'bar';
+    }
 }
 
 
