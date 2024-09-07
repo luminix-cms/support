@@ -6,9 +6,9 @@ export type HasFacadeAccessor = {
     getFacadeAccessor(): string | object;
 }
 
-export type FacadeOf<TService extends object> = HasFacadeAccessor & TService;
+export type FacadeOf<TService extends object, TBase extends HasFacadeAccessor> = TBase & TService;
 
-export default function MakeFacade<TService extends object>(Base: Constructor<HasFacadeAccessor>, app?: Application): FacadeOf<TService> {
+export default function MakeFacade<TService extends object, TBase extends HasFacadeAccessor>(Base: Constructor<HasFacadeAccessor>, app?: Application): FacadeOf<TService, TBase> {
     
     class Facade extends Base {
 
@@ -43,7 +43,7 @@ export default function MakeFacade<TService extends object>(Base: Constructor<Ha
 
     }
 
-    return new Facade() as FacadeOf<TService>;
+    return new Facade() as FacadeOf<TService, TBase>;
 }
 
 
