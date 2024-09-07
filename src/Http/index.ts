@@ -5,18 +5,6 @@ import Macroable from "../Mixins/Macroable";
 
 class HttpStatic {
 
-    get Client() {
-        return Client;
-    }
-
-    get Response() {
-        return Response;
-    }
-
-    get Request() {
-        return Request;
-    }
-
     getClient(): Client {
         return new Client();
     }
@@ -84,7 +72,7 @@ class HttpStatic {
 
 }
 
-const Http = new (Macroable<Record<string, () => Client>, typeof HttpStatic>(HttpStatic))();
+const Http = new (Macroable<Record<string, (...args: any) => Client>, typeof HttpStatic>(HttpStatic))();
 
 export {
     Client,
