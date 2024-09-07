@@ -36,7 +36,7 @@ export default function MakeFacade<TService extends object, TBase extends HasFac
                         return Reflect.get(service, prop);
                     }
 
-                    throw new Error(`Method ${String(prop)} does not exist on '${target.getFacadeAccessor()}'`);
+                    throw new Error(`Property '${String(prop)}' does not exist on '${target.getFacadeAccessor()}'`);
                 }
             });
         }

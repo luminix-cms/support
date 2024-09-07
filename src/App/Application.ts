@@ -10,8 +10,9 @@ export type ApplicationEvents = {
     init: (providers: ServiceProvider[]) => void;
     booting: () => void;
     booted: () => void;
+    flushed: () => void;
+    flushing: () => void;
     ready: () => void;
-    flush: () => void;
 };
 
 
@@ -86,6 +87,13 @@ export default class Application<TContainers extends Record<string, any> = Recor
         return this;
     }
 
+    withProviders(providers: (typeof ServiceProvider)[]): this
+    {
+        this.providers.push(...providers);
+
+        return this;
+    }
+
 
     create()
     {
@@ -111,7 +119,7 @@ export default class Application<TContainers extends Record<string, any> = Recor
 
         this.emit('booted');
 
-        this.once('flush', () => {
+        this.once('flushing', () => {
             providers.forEach((provider) => {
                 if (provider.flush) {
                     provider.flush();
@@ -124,9 +132,14 @@ export default class Application<TContainers extends Record<string, any> = Recor
 
     flush()
     {
+        this.emit('flushing');
+
         this.singletons = {};
         this.loaders = {};
-        this.emit('flush');
+        this._configuration = {};
+        this.providers = [];
+
+        this.emit('flushed');
         
     }
 }

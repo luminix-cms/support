@@ -1,11 +1,15 @@
 import Application from './App/Application';
 import * as Arr from './Arr';
+import Client from './Http/Client';
 import Collection from './Collection';
 import EventSource from './Contracts/EventSource';
 import MakeFacade from './Mixins/MakeFacade';
-import Http, { Response, Client, Request } from './Http';
+
 import PropertyBag from './PropertyBag';
+import reader from './reader';
 import Reducible from './Mixins/Reducible';
+import Request from './Http/Request';
+import Response from './Http/Response';
 import Macroable from './Mixins/Macroable';
 import * as Obj from './Obj';
 import * as Query from './Query';
@@ -13,8 +17,9 @@ import ServiceProvider from './App/ServiceProvider';
 import * as Str from './Str';
 
 export type { Event } from './Contracts/EventSource';
-export type { ReducibleInterface } from './Mixins/Reducible';
+export type { MacroableOf } from './Mixins/Macroable';
 export type { HasFacadeAccessor } from './Mixins/MakeFacade';
+export type { ReducibleInterface } from './Mixins/Reducible';
 export type { PropertyBagEventMap } from './PropertyBag';
 export type { Constructor, TypeOf, JsonObject, JsonValue } from './Js';
 export type { RequestOptions } from './Http/Client';
@@ -25,11 +30,11 @@ export {
     Client,
     Collection,
     EventSource,
-    Http,
     Macroable,
     MakeFacade,
     Obj,
     PropertyBag,
+    reader,
     Reducible,
     Request,
     Response,
