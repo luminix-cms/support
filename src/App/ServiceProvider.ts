@@ -1,8 +1,7 @@
-import Application from './Application';
-
+import { ApplicationInterface } from "./Interfaces";
 
 export default class ServiceProvider {
-    constructor(protected app: Application) {};
+    constructor(protected app: ApplicationInterface) {};
 
     boot?(): void;
     register?(): void;

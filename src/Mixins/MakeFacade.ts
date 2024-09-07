@@ -8,13 +8,12 @@ export type HasFacadeAccessor = {
 
 export type FacadeOf<TService extends object, TBase extends HasFacadeAccessor> = TBase & TService;
 
-export default function MakeFacade<TService extends object, TBase extends HasFacadeAccessor>(Base: Constructor<HasFacadeAccessor>, app?: Application): FacadeOf<TService, TBase> {
-    
-    class Facade extends Base {
+export default function MakeFacade<TService extends object, TBase extends HasFacadeAccessor>(Base: Constructor<HasFacadeAccessor, []>, app?: Application): FacadeOf<TService, TBase> {
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        constructor(...args: any[]) {
-            super(...args);
+    return new (class extends Base {
+
+        constructor() {
+            super();
 
             return new Proxy(this, {
                 get(target, prop) {
@@ -33,7 +32,7 @@ export default function MakeFacade<TService extends object, TBase extends HasFac
                     }
 
                     if (Reflect.has(service, prop)) {
-                        return Reflect.get(service, prop);
+                        return Reflect.get(service, prop, service);
                     }
 
                     throw new Error(`Property '${String(prop)}' does not exist on '${target.getFacadeAccessor()}'`);
@@ -41,9 +40,7 @@ export default function MakeFacade<TService extends object, TBase extends HasFac
             });
         }
 
-    }
-
-    return new Facade() as FacadeOf<TService, TBase>;
+    })() as FacadeOf<TService, TBase>;
 }
 
 

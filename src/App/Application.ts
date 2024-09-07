@@ -1,22 +1,15 @@
-import EventSource from "../Contracts/EventSource";
-import ServiceProvider from "./ServiceProvider";
+import EventSource from '../Contracts/EventSource';
+import reader from '../reader';
+import {
+    ApplicationEvents, ApplicationInterface, ServiceLoader,
+} from './Interfaces';
+import ServiceProvider from './ServiceProvider';
 
-export type ServiceLoader = {
-    loader: () => any,
-    singleton?: boolean
-};
+import * as Obj from '../Obj';
 
-export type ApplicationEvents = {
-    init: (providers: ServiceProvider[]) => void;
-    booting: () => void;
-    booted: () => void;
-    flushed: () => void;
-    flushing: () => void;
-    ready: () => void;
-};
-
-
-export default class Application<TContainers extends Record<string, any> = Record<string, any>> extends EventSource<ApplicationEvents>
+export default class Application<TContainers extends Record<string, any> = Record<string, any>>
+    extends EventSource<ApplicationEvents>
+    implements ApplicationInterface<TContainers>
 {
 
     protected _configuration: Record<string, any> = {};
@@ -42,6 +35,15 @@ export default class Application<TContainers extends Record<string, any> = Recor
 
     get configuration() {
         return this._configuration;
+    }
+
+    loadConfiguration() {
+        if (document.getElementById('luminix-data::config')) {
+            const data = reader('config');
+            if (data && typeof data === 'object') {
+                this.withConfiguration(data);
+            }
+        }
     }
 
     bind<K extends keyof TContainers>(abstract: K, concrete: () => TContainers[K]): void
@@ -82,7 +84,7 @@ export default class Application<TContainers extends Record<string, any> = Recor
 
     withConfiguration(configuration: Record<string, any>): this
     {
-        this._configuration = configuration;
+        this._configuration = Obj.merge(this._configuration, configuration);
 
         return this;
     }
@@ -97,6 +99,8 @@ export default class Application<TContainers extends Record<string, any> = Recor
 
     create()
     {
+        this.loadConfiguration();
+
         const providers = this.providers.map((Provider) => {
             return new Provider(this);
         });
@@ -142,5 +146,35 @@ export default class Application<TContainers extends Record<string, any> = Recor
         this.emit('flushed');
         
     }
+
+    dump(): void
+    dump($return: true): Object
+    dump($return: false | string): void
+    dump($return: string | boolean = false): void | Object
+    {
+        const logger = this.make('log');
+
+        if (logger) {
+            const data = {
+                configuration: this.configuration,
+                services: this.services,
+                providers: this.providers,
+                singletons: this.singletons,
+            };
+
+            if ($return === true) {
+                return data;
+            }
+
+            if ($return === false) {
+                logger.info(data);
+            }
+
+            logger.info($return, data);
+        }
+    }
 }
+
+
+
 

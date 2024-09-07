@@ -15,7 +15,9 @@ import * as Obj from './Obj';
 import * as Query from './Query';
 import ServiceProvider from './App/ServiceProvider';
 import * as Str from './Str';
+import isValidationError from './Http/Utils/isValidationError';
 
+export type { ApplicationInterface, ApplicationEvents } from './App/Interfaces';
 export type { Event } from './Contracts/EventSource';
 export type { MacroableOf } from './Mixins/Macroable';
 export type { HasFacadeAccessor } from './Mixins/MakeFacade';
@@ -23,13 +25,13 @@ export type { ReducibleInterface } from './Mixins/Reducible';
 export type { PropertyBagEventMap } from './PropertyBag';
 export type { Constructor, TypeOf, JsonObject, JsonValue } from './Js';
 export type { RequestOptions } from './Http/Client';
-
 export {
     Application,
     Arr,
     Client,
     Collection,
     EventSource,
+    isValidationError,
     Macroable,
     MakeFacade,
     Obj,

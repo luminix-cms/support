@@ -1,6 +1,6 @@
 
 
-export type Constructor<T = {}> = new (...args: any[]) => T;
+export type Constructor<TInstance = {}, TArgs extends Array<any> = any[]> = new (...args: TArgs) => TInstance;
 
 export type TypeOf = 'string' | 'number' | 'boolean' | 'object' | 'undefined' | 'function' | 'symbol' | 'bigint';
 
