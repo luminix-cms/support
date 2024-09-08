@@ -21,7 +21,7 @@ export type { ApplicationInterface, ApplicationEvents } from './App/Interfaces';
 export type { Event } from './Contracts/EventSource';
 export type { MacroableOf } from './Mixins/Macroable';
 export type { HasFacadeAccessor } from './Mixins/MakeFacade';
-export type { ReducibleInterface } from './Mixins/Reducible';
+export type { ReducibleInterface, ReducibleOf } from './Mixins/Reducible';
 export type { PropertyBagEventMap } from './PropertyBag';
 export type { Constructor, TypeOf, JsonObject, JsonValue } from './Js';
 export type { RequestOptions } from './Http/Client';
