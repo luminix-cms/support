@@ -31,11 +31,7 @@ export default function MakeFacade<TService extends object, TBase extends HasFac
                         throw new Error(`Service ${String(accessor)} does not exist.`);
                     }
 
-                    if (Reflect.has(service, prop)) {
-                        return Reflect.get(service, prop, service);
-                    }
-
-                    throw new Error(`Property '${String(prop)}' does not exist on '${target.getFacadeAccessor()}'`);
+                    return Reflect.get(service, prop, service);
                 }
             });
         }
