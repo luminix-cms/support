@@ -1,7 +1,7 @@
 import EventSource from '../Contracts/EventSource';
 import reader from '../reader';
 import {
-    ApplicationEvents, ApplicationInterface, ServiceLoader,
+    ApplicationEvents, ServiceLoader,
 } from './Interfaces';
 import ServiceProvider from './ServiceProvider';
 
@@ -9,7 +9,6 @@ import * as Obj from '../Obj';
 
 export default class Application<TContainers extends Record<string, any> = Record<string, any>>
     extends EventSource<ApplicationEvents>
-    implements ApplicationInterface<TContainers>
 {
 
     protected _configuration: Record<string, any> = {};
@@ -18,15 +17,10 @@ export default class Application<TContainers extends Record<string, any> = Recor
 
     protected loaders: Record<string, ServiceLoader> = {};
 
-    private constructor(
+    constructor(
         protected providers: (typeof ServiceProvider)[] = [],
     ) {
         super();
-    }
-
-    static provides<TContainers extends Record<string, any> = Record<string, any>>(providers: (typeof ServiceProvider)[] = [])
-    {
-        return new Application<TContainers>(providers);
     }
 
     get services() {

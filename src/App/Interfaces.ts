@@ -9,7 +9,7 @@ export type ApplicationEvents = {
     ready: () => void;
 };
 
-export type ApplicationInterface<TContainers extends Record<string, any> = Record<string, any>> = EventSource<ApplicationEvents> & {
+export declare class ApplicationInterface<TContainers extends Record<string, any> = Record<string, any>> extends EventSource<ApplicationEvents> {
     get services(): Record<string, ServiceLoader>;
     get configuration(): Record<string, any>;
 
@@ -17,8 +17,8 @@ export type ApplicationInterface<TContainers extends Record<string, any> = Recor
     bind<K extends keyof TContainers>(abstract: K, concrete: () => TContainers[K]): void;
     singleton<K extends keyof TContainers>(abstract: K, concrete: () => TContainers[K]): void;
     make<K extends keyof TContainers & string>(abstract: K): TContainers[K];
-    withConfiguration(configuration: Record<string, any>): ApplicationInterface;
-    withProviders(providers: (typeof ServiceProviderInterface)[]): ApplicationInterface;
+    withConfiguration(configuration: Record<string, any>): this;
+    withProviders(providers: (typeof ServiceProviderInterface)[]): this;
     create(): void;
     flush(): void;
     dump(): void
