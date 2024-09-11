@@ -1,3 +1,5 @@
+import { produce, isDraftable } from 'immer';
+
 import Application from './App/Application';
 import * as Arr from './Arr';
 import Client from './Http/Client';
@@ -17,14 +19,6 @@ import ServiceProvider from './App/ServiceProvider';
 import * as Str from './Str';
 import isValidationError from './Http/Utils/isValidationError';
 
-export type { ApplicationInterface, ApplicationEvents } from './App/Interfaces';
-export type { Event } from './Contracts/EventSource';
-export type { MacroableOf, MacroableInterface } from './Mixins/Macroable';
-export type { HasFacadeAccessor, FacadeOf } from './Mixins/MakeFacade';
-export type { ReducibleInterface, ReducibleOf } from './Mixins/Reducible';
-export type { PropertyBagEventMap } from './PropertyBag';
-export type { Constructor, TypeOf, JsonObject, JsonValue } from './Js';
-export type { RequestOptions } from './Http/Client';
 export {
     Application,
     Arr,
@@ -43,6 +37,16 @@ export {
     ServiceProvider,
     Query,
     Str,
+
+    produce,
+    isDraftable,
 };
 
-
+export type { ApplicationInterface, ApplicationEvents } from './App/Interfaces';
+export type { Event } from './Contracts/EventSource';
+export type { MacroableOf, MacroableInterface } from './Mixins/Macroable';
+export type { HasFacadeAccessor, FacadeOf } from './Mixins/MakeFacade';
+export type { ReducibleInterface, ReducibleOf, ReducerCallback } from './Mixins/Reducible';
+export type { PropertyBagEventMap } from './PropertyBag';
+export type { Constructor, TypeOf, JsonObject, JsonValue } from './Js';
+export type { RequestOptions } from './Http/Client';

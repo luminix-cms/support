@@ -138,6 +138,8 @@ export default class Application<TContainers extends Record<string, any> = Recor
         this.providers = [];
 
         this.emit('flushed');
+
+        this.flushEvents();
         
     }
 

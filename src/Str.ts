@@ -32,8 +32,16 @@ export function camel(string: string): string {
     return _.camelCase(string);
 }
 
+export function lower(string: string): string {
+    return string.toLowerCase();
+}
+
 export function kebab(string: string): string {
     return _.kebabCase(string);
+}
+
+export function readable(string: string): string {
+    return _.capitalize(_.startCase(string));
 }
 
 export function studly(string: string): string {
@@ -44,10 +52,22 @@ export function snake(string: string): string {
     return _.snakeCase(string);
 }
 
+export function title(string: string): string {
+    return _.startCase(string);
+}
+
 export function trim(string: string, chars?: string): string {
     return _.trim(string, chars);
 }
 
-export function upperFirst(string: string): string {
+export function ucfirst(string: string): string {
     return _.upperFirst(string);
 }
+
+export function upper(string: string): string {
+    return string.toUpperCase();
+}
+
+// export function upperFirst(string: string): string {
+//     return _.upperFirst(string);
+// }

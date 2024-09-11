@@ -37,6 +37,11 @@ export default class EventSource<TEvents extends EventMap = EventMap>
         this.emitter.emit(event, ...data);
     }
 
+    flushEvents()
+    {
+        this.emitter.events = {};
+    }
+
 }
 
 
