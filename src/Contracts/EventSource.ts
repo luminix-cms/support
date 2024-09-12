@@ -8,6 +8,11 @@ export type EventMap = {
     [key: string]: (event: Event) => void
 };
 
+export type EventMapOf<TSource extends EventSource> = TSource extends EventSource<infer T> ? T : never;
+
+export type EventsOf<TSource extends EventSource> = keyof EventMapOf<TSource>;
+
+export type EventCallbackOf<TSource extends EventSource, E extends EventsOf<TSource>> = EventMapOf<TSource>[E];
 
 
 export default class EventSource<TEvents extends EventMap = EventMap>

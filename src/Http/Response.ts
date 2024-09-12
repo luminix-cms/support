@@ -5,16 +5,20 @@ import * as Obj from '../Obj';
 export default class Response<TResponse = any, TData = any> {
 
     constructor(
-        private response: AxiosResponse<TResponse, TData>,
-        private error?: Error
+        protected _response: AxiosResponse<TResponse, TData>,
+        protected _error?: Error
     ) {
 
     }
 
+    error() {
+        return this._error;
+    }
+
     body(): string {
-        return typeof this.response.data === 'object'
-            ? JSON.stringify(this.response.data)
-            : String(this.response.data);
+        return typeof this._response.data === 'object'
+            ? JSON.stringify(this._response.data)
+            : String(this._response.data);
     }
 
     json(): TResponse;
@@ -23,14 +27,19 @@ export default class Response<TResponse = any, TData = any> {
     json(key?: string, defaultValue?: any): any {
 
         if (key) {
-            return Obj.get(this.response.data, key, defaultValue);
+            return Obj.get(this._response.data, key, defaultValue);
         }
 
-        return this.response.data;
+        return this._response.data;
     }
+
+    has(key: string): boolean {
+        return Obj.has(this._response.data, key);
+    }
+
     // collect(key?: string): Collection {}
     status(): number {
-        return Number(this.response.status);
+        return Number(this._response.status);
     }
 
     successful(): boolean {
@@ -54,11 +63,11 @@ export default class Response<TResponse = any, TData = any> {
     }
 
     header(header: string): string {
-        return this.response.headers[header];
+        return this._response.headers[header];
     }
 
     headers(): Record<string, string> {
-        return this.response.headers as Record<string, string>;
+        return this._response.headers as Record<string, string>;
     }
 
     ok(): boolean {
@@ -123,7 +132,7 @@ export default class Response<TResponse = any, TData = any> {
 
     throw(): this {
         if (this.failed()) {
-            throw this.error || new Error(this.body());
+            throw this._error || new Error(this.body());
         }
 
         return this;

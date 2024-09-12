@@ -1,30 +1,35 @@
 import { produce, isDraftable } from 'immer';
 
 import Application from './App/Application';
-import * as Arr from './Arr';
 import Client from './Http/Client';
 import Collection from './Collection';
 import EventSource from './Contracts/EventSource';
+import Macroable from './Mixins/Macroable';
 import MakeFacade from './Mixins/MakeFacade';
-
 import PropertyBag from './PropertyBag';
 import reader from './reader';
 import Reducible from './Mixins/Reducible';
 import Request from './Http/Request';
 import Response from './Http/Response';
-import Macroable from './Mixins/Macroable';
+import ServiceProvider from './App/ServiceProvider';
+
+import isValidationError from './Http/Utils/isValidationError';
+
+import * as Arr from './Arr';
+import * as DateTime from './DateTime';
+import * as Func from './Func';
 import * as Obj from './Obj';
 import * as Query from './Query';
-import ServiceProvider from './App/ServiceProvider';
 import * as Str from './Str';
-import isValidationError from './Http/Utils/isValidationError';
 
 export {
     Application,
     Arr,
     Client,
     Collection,
+    DateTime,
     EventSource,
+    Func,
     isValidationError,
     Macroable,
     MakeFacade,
@@ -43,7 +48,7 @@ export {
 };
 
 export type { ApplicationInterface, ApplicationEvents } from './App/Interfaces';
-export type { Event } from './Contracts/EventSource';
+export type { Event, EventMap, EventMapOf, EventsOf, EventCallbackOf } from './Contracts/EventSource';
 export type { MacroableOf, MacroableInterface } from './Mixins/Macroable';
 export type { HasFacadeAccessor, FacadeOf } from './Mixins/MakeFacade';
 export type { ReducibleInterface, ReducibleOf, ReducerCallback } from './Mixins/Reducible';

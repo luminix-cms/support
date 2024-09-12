@@ -40,6 +40,18 @@ export function kebab(string: string): string {
     return _.kebabCase(string);
 }
 
+export function padBoth(string: string, length: number, chars?: string): string {
+    return _.pad(string, length, chars);
+}
+
+export function padLeft(string: string, length: number, chars?: string): string {
+    return _.padStart(string, length, chars);
+}
+
+export function padRight(string: string, length: number, chars?: string): string {
+    return _.padEnd(string, length, chars);
+}
+
 export function readable(string: string): string {
     return _.capitalize(_.startCase(string));
 }
