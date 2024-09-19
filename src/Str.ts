@@ -32,6 +32,10 @@ export function camel(string: string): string {
     return _.camelCase(string);
 }
 
+export function lcfirst(string: string): string {
+    return _.lowerFirst(string);
+}
+
 export function lower(string: string): string {
     return string.toLowerCase();
 }

@@ -49,9 +49,10 @@ export {
 
 export type { ApplicationInterface, ApplicationEvents } from './App/Interfaces';
 export type { Event, EventMap, EventMapOf, EventsOf, EventCallbackOf } from './Contracts/EventSource';
+export type { RequestOptions } from './Http/Client';
 export type { MacroableOf, MacroableInterface } from './Mixins/Macroable';
 export type { HasFacadeAccessor, FacadeOf } from './Mixins/MakeFacade';
 export type { ReducibleInterface, ReducibleOf, ReducerCallback } from './Mixins/Reducible';
-export type { PropertyBagEventMap } from './PropertyBag';
+export type { CollectionIteratorCallback } from './Collection';
 export type { Constructor, TypeOf, JsonObject, JsonValue } from './Js';
-export type { RequestOptions } from './Http/Client';
+export type { PropertyBagEventMap } from './PropertyBag';

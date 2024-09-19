@@ -7,7 +7,7 @@ export function fromObject(object: object): URLSearchParams {
     return Obj.toQuery(object);
 }
 
-export function toObject(searchParams: URLSearchParams): object {
+export function toObject(searchParams: URLSearchParams) {
     return Obj.fromQuery(searchParams);
 }
 
