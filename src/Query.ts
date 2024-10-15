@@ -1,4 +1,4 @@
-import * as Obj from "./Obj";
+import Obj from "./Obj";
 import * as Str from "./Str";
 
 export type Operator = '=' | '!=' | '>' | '>=' | '<' | '<=';

@@ -1,6 +1,6 @@
 import { produce } from 'immer';
 import EventSource, { Event } from './Contracts/EventSource';
-import * as Obj from './Obj';
+import Obj from './Obj';
 
 export type PropertyBagChangeEvent = {
     path: string;

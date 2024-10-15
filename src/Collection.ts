@@ -1,6 +1,6 @@
 import EventSource, { Event } from "./Contracts/EventSource";
-import * as Arr from './Arr';
-import * as Obj from './Obj';
+import Arr from './Arr';
+import Obj from './Obj';
 import { Constructor, TypeOf } from "./Js";
 import { Operator } from "./Query";
 

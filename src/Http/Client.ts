@@ -1,6 +1,6 @@
 
 import { AxiosRequestConfig } from 'axios';
-import * as Obj from '../Obj';
+import Obj from '../Obj';
 import Request from './Request';
 
 

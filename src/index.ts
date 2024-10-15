@@ -1,4 +1,5 @@
-import { produce, isDraftable } from 'immer';
+import axios from 'axios';
+import * as immer from 'immer';
 
 import Application from './App/Application';
 import Client from './Http/Client';
@@ -15,10 +16,10 @@ import ServiceProvider from './App/ServiceProvider';
 
 import isValidationError from './Http/Utils/isValidationError';
 
-import * as Arr from './Arr';
+import Arr from './Arr';
 import * as DateTime from './DateTime';
 import * as Func from './Func';
-import * as Obj from './Obj';
+import Obj from './Obj';
 import * as Query from './Query';
 import * as Str from './Str';
 
@@ -43,9 +44,12 @@ export {
     Query,
     Str,
 
-    produce,
-    isDraftable,
+    axios,
+    immer,
 };
+
+export type { ArrMacros } from './Arr';
+export type { ObjMacros } from './Obj';
 
 export type { ApplicationInterface, ApplicationEvents } from './App/Interfaces';
 export type { Event, EventMap, EventMapOf, EventsOf, EventCallbackOf } from './Contracts/EventSource';

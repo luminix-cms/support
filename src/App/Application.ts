@@ -5,7 +5,7 @@ import {
 } from './Interfaces';
 import ServiceProvider from './ServiceProvider';
 
-import * as Obj from '../Obj';
+import Obj from '../Obj';
 
 export default class Application<TContainers extends Record<string, any> = Record<string, any>>
     extends EventSource<ApplicationEvents>

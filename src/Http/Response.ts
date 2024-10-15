@@ -1,6 +1,6 @@
 
 import { AxiosResponse } from 'axios';
-import * as Obj from '../Obj';
+import Obj from '../Obj';
 
 export default class Response<TResponse = any, TData = any> {
 
