@@ -52,7 +52,7 @@ export type { ArrMacros } from './Arr';
 export type { DateTimeMacros } from './DateTime';
 export type { FuncMacros } from './Func';
 export type { ObjMacros } from './Obj';
-export type { QueryMacros } from './Query';
+export type { QueryMacros, Operator } from './Query';
 export type { StrMacros } from './Str';
 
 export type { ApplicationInterface, ApplicationEvents } from './App/Interfaces';
