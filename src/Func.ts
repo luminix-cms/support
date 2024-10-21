@@ -1,12 +1,22 @@
 
-import _, { DebouncedFunc, DebounceSettings, ThrottleSettings } from 'lodash-es';
+import { throttle, debounce, DebouncedFunc, DebounceSettings, ThrottleSettings } from 'lodash-es';
+import Macroable from './Mixins/Macroable';
 
-export function throttle<T extends (...args: any) => any>(func: T, wait?: number, options?: ThrottleSettings): DebouncedFunc<T> {
-    return _.throttle(func, wait, options);
+export declare class FuncMacros {
+    [x: string]: (...args: any[]) => any;
 }
 
-export function debounce<T extends (...args: any) => any>(func: T, wait?: number, options?: DebounceSettings): DebouncedFunc<T> {
-    return _.debounce(func, wait, options);
+class FuncStatic {
+
+    throttle<T extends (...args: any) => any>(func: T, wait?: number, options?: ThrottleSettings): DebouncedFunc<T> {
+        return throttle(func, wait, options);
+    }
+    
+    debounce<T extends (...args: any) => any>(func: T, wait?: number, options?: DebounceSettings): DebouncedFunc<T> {
+        return debounce(func, wait, options);
+    }
 }
 
+const Func = new (Macroable<FuncMacros, typeof FuncStatic>(FuncStatic))();
 
+export default Func;

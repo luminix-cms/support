@@ -1,89 +1,100 @@
-import * as _ from "lodash-es";
+import {
+    camelCase, lowerFirst, kebabCase, pad, padStart, padEnd, capitalize,
+    startCase, upperFirst, snakeCase, trim,
+} from "lodash-es";
+import Macroable from "./Mixins/Macroable";
 
-export function after(string: string, search: string): string {
-    if (!string.includes(search)) {
-        return '';
+export declare class StrMacros {
+    [x: string]: (...args: any[]) => any;
+}
+
+class StrStatic {
+
+    after(string: string, search: string): string {
+        if (!string.includes(search)) {
+            return '';
+        }
+        return string.split(search).slice(1).join('');
     }
-    return string.split(search).slice(1).join('');
-}
-
-export function afterLast(string: string, search: string): string {
-    if (!string.includes(search)) {
-        return '';
+    
+    afterLast(string: string, search: string): string {
+        if (!string.includes(search)) {
+            return '';
+        }
+        return string.split(search).slice(-1).join('');
     }
-    return string.split(search).slice(-1).join('');
-}
-
-export function before(string: string, search: string): string {
-    if (!string.includes(search)) {
-        return '';
+    
+    before(string: string, search: string): string {
+        if (!string.includes(search)) {
+            return '';
+        }
+        return string.split(search).slice(0, 1).join('');
     }
-    return string.split(search).slice(0, 1).join('');
-}
-
-export function beforeLast(string: string, search: string): string {
-    if (!string.includes(search)) {
-        return '';
+    
+    beforeLast(string: string, search: string): string {
+        if (!string.includes(search)) {
+            return '';
+        }
+        return string.split(search).slice(0, -1).join('');
     }
-    return string.split(search).slice(0, -1).join('');
+    
+    camel(string: string): string {
+        return camelCase(string);
+    }
+    
+    lcfirst(string: string): string {
+        return lowerFirst(string);
+    }
+    
+    lower(string: string): string {
+        return string.toLowerCase();
+    }
+    
+    kebab(string: string): string {
+        return kebabCase(string);
+    }
+    
+    padBoth(string: string, length: number, chars?: string): string {
+        return pad(string, length, chars);
+    }
+    
+    padLeft(string: string, length: number, chars?: string): string {
+        return padStart(string, length, chars);
+    }
+    
+    padRight(string: string, length: number, chars?: string): string {
+        return padEnd(string, length, chars);
+    }
+    
+    readable(string: string): string {
+        return capitalize(startCase(string));
+    }
+    
+    studly(string: string): string {
+        return upperFirst(this.camel(string));
+    }
+    
+    snake(string: string): string {
+        return snakeCase(string);
+    }
+    
+    title(string: string): string {
+        return startCase(string);
+    }
+    
+    trim(string: string, chars?: string): string {
+        return trim(string, chars);
+    }
+    
+    ucfirst(string: string): string {
+        return upperFirst(string);
+    }
+    
+    upper(string: string): string {
+        return string.toUpperCase();
+    }
 }
 
-export function camel(string: string): string {
-    return _.camelCase(string);
-}
+const Str = new (Macroable<StrMacros, typeof StrStatic>(StrStatic))();
 
-export function lcfirst(string: string): string {
-    return _.lowerFirst(string);
-}
-
-export function lower(string: string): string {
-    return string.toLowerCase();
-}
-
-export function kebab(string: string): string {
-    return _.kebabCase(string);
-}
-
-export function padBoth(string: string, length: number, chars?: string): string {
-    return _.pad(string, length, chars);
-}
-
-export function padLeft(string: string, length: number, chars?: string): string {
-    return _.padStart(string, length, chars);
-}
-
-export function padRight(string: string, length: number, chars?: string): string {
-    return _.padEnd(string, length, chars);
-}
-
-export function readable(string: string): string {
-    return _.capitalize(_.startCase(string));
-}
-
-export function studly(string: string): string {
-    return _.upperFirst(camel(string));
-}
-
-export function snake(string: string): string {
-    return _.snakeCase(string);
-}
-
-export function title(string: string): string {
-    return _.startCase(string);
-}
-
-export function trim(string: string, chars?: string): string {
-    return _.trim(string, chars);
-}
-
-export function ucfirst(string: string): string {
-    return _.upperFirst(string);
-}
-
-export function upper(string: string): string {
-    return string.toUpperCase();
-}
-
-// export function upperFirst(string: string): string {
-//     return _.upperFirst(string);
-// }
+export default Str;

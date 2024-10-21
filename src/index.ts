@@ -17,11 +17,11 @@ import ServiceProvider from './App/ServiceProvider';
 import isValidationError from './Http/Utils/isValidationError';
 
 import Arr from './Arr';
-import * as DateTime from './DateTime';
-import * as Func from './Func';
+import DateTime from './DateTime';
+import Func from './Func';
 import Obj from './Obj';
-import * as Query from './Query';
-import * as Str from './Str';
+import Query from './Query';
+import Str from './Str';
 
 export {
     Application,
@@ -49,7 +49,11 @@ export {
 };
 
 export type { ArrMacros } from './Arr';
+export type { DateTimeMacros } from './DateTime';
+export type { FuncMacros } from './Func';
 export type { ObjMacros } from './Obj';
+export type { QueryMacros } from './Query';
+export type { StrMacros } from './Str';
 
 export type { ApplicationInterface, ApplicationEvents } from './App/Interfaces';
 export type { Event, EventMap, EventMapOf, EventsOf, EventCallbackOf } from './Contracts/EventSource';
