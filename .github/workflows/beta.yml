@@ -19,10 +19,12 @@ jobs:
             node-version: 20
             registry-url: https://registry.npmjs.org/
 
-        - uses: paulhatch/semantic-version@v5.2.1
+        - uses: paulhatch/semantic-version@v5.4.0
           id: semver
           with:
-            version_format: "${major}.${minor}.${patch}-beta.${increment}"
+            tag_prefix: v
+            version_format: "${major}.${minor}.${patch}"
+            namespace: beta
             debug: true
 
         - name: Build & Tag
@@ -31,16 +33,16 @@ jobs:
             npm run build
             npm version ${{ steps.semver.outputs.version }} --no-git-tag-version
 
-        - name: Publish to NPM
-          uses: JS-DevTools/npm-publish@v2
-          with:
-            tag: beta
-            token: ${{ secrets.NPM_TOKEN }}
+        # - name: Publish to NPM
+        #   uses: JS-DevTools/npm-publish@v2
+        #   with:
+        #     tag: beta
+        #     token: ${{ secrets.NPM_TOKEN }}
 
         - name: Publish Github Release
           uses: softprops/action-gh-release@v1
           with:
-            tag_name: ${{ steps.semver.outputs.version }}
+            tag_name: ${{ steps.semver.outputs.version_tag }}
             target_commitish: ${{ github.sha }}
             draft: false
             prerelease: true
