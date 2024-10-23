@@ -23,8 +23,8 @@ jobs:
           id: semver
           with:
             tag_prefix: v
-            version_format: "${major}.${minor}.${patch}"
-            namespace: beta
+            version_format: "${major}.${minor}.${patch}-beta.${increment}"
+            enable_prerelease_mode: true
             debug: true
 
         - name: Build & Tag
@@ -32,6 +32,7 @@ jobs:
             npm install
             npm run build
             npm version ${{ steps.semver.outputs.version }} --no-git-tag-version
+            echo "Version: ${{ steps.semver.outputs.version }}"
 
         # - name: Publish to NPM
         #   uses: JS-DevTools/npm-publish@v2
