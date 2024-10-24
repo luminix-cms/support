@@ -9,7 +9,7 @@ jobs:
         runs-on: [ubuntu-latest]
         steps:
         - name: Checkout
-          uses: actions/checkout@v2
+          uses: actions/checkout@v4
           with:
             fetch-depth: 0
 
@@ -19,20 +19,18 @@ jobs:
             node-version: 20
             registry-url: https://registry.npmjs.org/
 
-        - uses: paulhatch/semantic-version@v5.4.0
+        - uses: paulhatch/semantic-version@v5.2.1
           id: semver
           with:
-            tag_prefix: v
             version_format: "${major}.${minor}.${patch}-beta.${increment}"
             enable_prerelease_mode: true
-            debug: true
 
         - name: Build & Tag
           run: |
             npm install
             npm run build
             npm version ${{ steps.semver.outputs.version }} --no-git-tag-version
-            echo "Version: ${{ steps.semver.outputs.version }}"
+            echo "Version is: ${{ steps.semver.outputs.version }}"
 
         # - name: Publish to NPM
         #   uses: JS-DevTools/npm-publish@v2
@@ -43,7 +41,7 @@ jobs:
         - name: Publish Github Release
           uses: softprops/action-gh-release@v1
           with:
-            tag_name: ${{ steps.semver.outputs.version_tag }}
+            tag_name: v${{ steps.semver.outputs.version }}
             target_commitish: ${{ github.sha }}
             draft: false
             prerelease: true
