@@ -58,6 +58,8 @@ class FuncStatic {
     debounce<T extends (...args: any) => any>(func: T, wait?: number, options?: DebounceSettings): DebouncedFunc<T> {
         return debounce(func, wait, options);
     }
+
+
 }
 
 const Func = new (Macroable<FuncMacros, typeof FuncStatic>(FuncStatic))();
