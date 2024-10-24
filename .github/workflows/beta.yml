@@ -23,7 +23,7 @@ jobs:
           id: semver
           with:
             version_format: "${major}.${minor}.${patch}-beta.${increment}"
-            enable_prerelease_mode: true
+            # enable_prerelease_mode: true
 
         - name: Build & Tag
           run: |
