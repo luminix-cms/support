@@ -66,7 +66,7 @@ class StrStatic {
         return padEnd(string, length, chars);
     }
     
-    readable(string: string): string {
+    human(string: string): string {
         return capitalize(startCase(string));
     }
     
