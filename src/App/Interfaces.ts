@@ -10,7 +10,9 @@ export type ApplicationEvents = {
 };
 
 export declare class ApplicationInterface<TContainers extends Record<string, any> = Record<string, any>> extends EventSource<ApplicationEvents> {
-    get services(): Record<string, ServiceLoader>;
+    get services(): Array<ServiceLoader & {
+        name: string;
+    }>;
     get configuration(): Record<string, any>;
 
     loadConfiguration(): void;

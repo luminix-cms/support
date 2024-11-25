@@ -6,6 +6,7 @@ import {
 import ServiceProvider from './ServiceProvider';
 
 import Obj from '../Obj';
+import AppAlreadyBootedException from '../Exceptions/AppAlreadyBootedException';
 
 export default class Application<TContainers extends Record<string, any> = Record<string, any>>
     extends EventSource<ApplicationEvents>
@@ -24,7 +25,12 @@ export default class Application<TContainers extends Record<string, any> = Recor
     }
 
     get services() {
-        return this.loaders;
+        return Object.entries(this.loaders).map(([name, loader]) => {
+            return {
+                name,
+                ...loader,
+            };
+        });
     }
 
     get configuration() {
@@ -93,6 +99,10 @@ export default class Application<TContainers extends Record<string, any> = Recor
 
     create()
     {
+        if (this.services.length > 0) {
+            throw new AppAlreadyBootedException();
+        }
+
         this.loadConfiguration();
 
         const providers = this.providers.map((Provider) => {
