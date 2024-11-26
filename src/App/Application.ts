@@ -41,7 +41,7 @@ export default class Application<TContainers extends Record<string, any> = Recor
         if (document.getElementById('luminix-data::config')) {
             const data = reader('config');
             if (data && typeof data === 'object') {
-                this._configuration = Obj.merge({}, data);
+                this.withConfiguration(data);
             }
         }
     }
@@ -100,7 +100,7 @@ export default class Application<TContainers extends Record<string, any> = Recor
     create()
     {
         if (this.services.length > 0) {
-            this.make('log').warning('[Luminix] Application already created. Skipping double invocation of `create()`. '
+            console.warn('[Luminix] Application already created. Skipping double invocation of `create()`. '
                 + 'If you want to re-create the application, please flush it first.'
             );
             return;
