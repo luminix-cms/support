@@ -5,7 +5,6 @@ import {
 } from './Interfaces';
 import ServiceProvider from './ServiceProvider';
 
-import Obj from '../Obj';
 import { merge } from 'lodash-es';
 
 export default class Application<TContainers extends Record<string, any> = Record<string, any>>
