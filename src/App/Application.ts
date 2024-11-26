@@ -6,7 +6,7 @@ import {
 import ServiceProvider from './ServiceProvider';
 
 import Obj from '../Obj';
-import AppAlreadyBootedException from '../Exceptions/AppAlreadyBootedException';
+import { merge } from 'lodash-es';
 
 export default class Application<TContainers extends Record<string, any> = Record<string, any>>
     extends EventSource<ApplicationEvents>
@@ -41,7 +41,7 @@ export default class Application<TContainers extends Record<string, any> = Recor
         if (document.getElementById('luminix-data::config')) {
             const data = reader('config');
             if (data && typeof data === 'object') {
-                this.withConfiguration(data);
+                this._configuration = Obj.merge({}, data);
             }
         }
     }
@@ -84,7 +84,7 @@ export default class Application<TContainers extends Record<string, any> = Recor
 
     withConfiguration(configuration: Record<string, any>): this
     {
-        this._configuration = Obj.merge(this._configuration, configuration);
+        merge(this._configuration, configuration);
 
         return this;
     }
@@ -100,7 +100,10 @@ export default class Application<TContainers extends Record<string, any> = Recor
     create()
     {
         if (this.services.length > 0) {
-            throw new AppAlreadyBootedException();
+            this.make('log').warning('[Luminix] Application already created. Skipping double invocation of `create()`. '
+                + 'If you want to re-create the application, please flush it first.'
+            );
+            return;
         }
 
         this.loadConfiguration();
