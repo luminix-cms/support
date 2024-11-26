@@ -39,8 +39,15 @@ export class ObjStatic {
         return _.isEqual(object, other);
     }
     
-    merge(object: any, ...sources: any[]): any {
-        return _.merge(object, ...sources);
+    merge(target: any, ...sources: any[]): any {
+        let clone: any;
+        try {
+            clone = structuredClone(target);
+        } catch (e) {
+            clone = _.cloneDeep(target);
+        }
+        _.merge(clone, ...sources);
+        return clone;
     }
     
     omit(object: any, ...paths: string[]): any {
