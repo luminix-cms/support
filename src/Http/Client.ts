@@ -67,14 +67,36 @@ export default class Client {
         return this;
     }
 
-    withQueryParameters(params: string | object): this {
-        Obj.set(this.options, 'params', Obj.merge(this.options.params, params));
+    withQueryParameters(params: URLSearchParams | string | object): this {
+        const _params = typeof params === 'string'
+            ? Obj.fromQuery(new URLSearchParams(params))
+            : (
+                params instanceof URLSearchParams
+                    ? Obj.fromQuery(params)
+                    : params
+            );
+
+        Obj.set(
+            this.options,
+            'params',
+            Obj.merge(this.options.params || {}, _params)
+        );
 
         return this;
     }
 
-    replaceQueryParameters(params: string | object): this {
-        Obj.set(this.options, 'params', params);
+    replaceQueryParameters(params: URLSearchParams | string | object): this {
+        Obj.set(
+            this.options,
+            'params',
+            typeof params === 'string'
+                ? Obj.fromQuery(new URLSearchParams(params))
+                : (
+                    params instanceof URLSearchParams
+                        ? Obj.fromQuery(params)
+                        : params
+                )
+        );
 
         return this;
     }
