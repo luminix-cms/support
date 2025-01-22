@@ -1,11 +1,17 @@
 import EventSource from '../Contracts/EventSource';
 import reader from '../reader';
-import {
-    ApplicationEvents, ServiceLoader,
-} from './Interfaces';
+
+import { ApplicationEvents, ServiceLoader } from './Interfaces';
 import ServiceProvider from './ServiceProvider';
 
 import { merge } from 'lodash-es';
+
+export type ApplicationDump = {
+    configuration: Record<string, any>;
+    services: ServiceLoader[];
+    providers: (typeof ServiceProvider)[];
+    singletons: Record<string, any>;
+}
 
 export default class Application<TContainers extends Record<string, any> = Record<string, any>>
     extends EventSource<ApplicationEvents>
@@ -45,6 +51,14 @@ export default class Application<TContainers extends Record<string, any> = Recor
         }
     }
 
+    /**
+     * Bind a service as a singleton.
+     * 
+     * When called, the service will create distinct instances, for each request.
+     * 
+     * @param abstract 
+     * @param concrete 
+     */
     bind<K extends keyof TContainers>(abstract: K, concrete: () => TContainers[K]): void
     {
         if (typeof abstract !== 'string') {
@@ -53,6 +67,14 @@ export default class Application<TContainers extends Record<string, any> = Recor
         this.loaders[abstract] = { loader: concrete };
     }
 
+    /**
+     * Bind a service as a singleton.
+     * 
+     * When called, the service will be instantiated only once, even if it is requested multiple times.
+     * 
+     * @param abstract 
+     * @param concrete 
+     */
     singleton<K extends keyof TContainers>(abstract: K, concrete: () => TContainers[K]): void
     {
         if (typeof abstract !== 'string') {
@@ -156,9 +178,9 @@ export default class Application<TContainers extends Record<string, any> = Recor
     }
 
     dump(): void
-    dump($return: true): Object
+    dump($return: true): ApplicationDump
     dump($return: false | string): void
-    dump($return: string | boolean = false): void | Object
+    dump($return: string | boolean = false): void | ApplicationDump
     {
         const data = {
             configuration: this.configuration,
