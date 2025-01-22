@@ -2,11 +2,6 @@
 import Application from '../src/App/Application';
 import ServiceProvider from '../src/App/ServiceProvider';
 
-// import Macroable from '../src/Mixins/Macroable';
-// import Reducible from '../src/Mixins/Reducible';
-
-// import mockAxios from 'axios';
-
 class TestProvider extends ServiceProvider {
 
 }
@@ -23,7 +18,12 @@ class TestApp extends Application {
 
 }
 
-describe('testing application', () => {
+describe('testing application class', () => {
+
+    const testConfig = {
+        name: 'Test App',
+        env: 'testing',
+    };
 
     test('create app events', async () => {
         const app = new TestApp();
@@ -65,56 +65,33 @@ describe('testing application', () => {
         });
         app.create();
 
-        expect(app.dump(true).configuration).toContain({
-            name: 'Test App',
-            env: 'testing',
-        });
-    });
-
-    // test('create reducible app', async () => {
-    //     const app = new (Reducible(TestApp))();
-
-    //     app.reduce('bar', (value: number) => value + 1);
-
-    //     app.create();
-    // });
-
-    // test('create macroable app', async () => {
-    //     const app = new (Macroable(TestApp))();
-
-    //     app.macro('baz', () => app.foo());
-
-    //     app.create();
-    // });
-
-    test('app with single-instance facade', async () => {
-        const app = new TestApp();
-
-        app.singleton('lorem', () => 'ipsum');
-
-        const a = app.make('lorem');
-        const b = app.make('lorem');
-
-        app.create();
-
-        expect(a).toBe('ipsum');
-        expect(b).toBe('ipsum');
-        expect(a).toEqual(b);
+        expect(app.dump(true).configuration).toStrictEqual(testConfig);
     });
 
     test('app with multi-instance facade', async () => {
         const app = new TestApp();
+
+        app.create();
 
         app.bind('lorem', () => 'ipsum');
 
         const a = app.make('lorem');
         const b = app.make('lorem');
 
+        expect(a).not.toEqual(b);
+    });
+
+    test('app with single-instance facade', async () => {
+        const app = new TestApp();
+
         app.create();
 
-        expect(a).toContain('ipsum');
-        expect(b).toContain('ipsum');
-        expect(a).not.toEqual(b);
+        app.singleton('lorem', () => 'ipsum');
+
+        const a = app.make('lorem');
+        const b = app.make('lorem');
+
+        expect(a).toEqual(b);
     });
 
     test('flush app', async () => {
