@@ -160,26 +160,24 @@ export default class Application<TContainers extends Record<string, any> = Recor
     dump($return: false | string): void
     dump($return: string | boolean = false): void | Object
     {
+        const data = {
+            configuration: this.configuration,
+            services: this.services,
+            providers: this.providers,
+            singletons: this.singletons,
+        };
+
+        if ($return === true) {
+            return data;
+        }
+
         const logger = this.make('log');
 
-        if (logger) {
-            const data = {
-                configuration: this.configuration,
-                services: this.services,
-                providers: this.providers,
-                singletons: this.singletons,
-            };
-
-            if ($return === true) {
-                return data;
-            }
-
-            if ($return === false) {
-                logger.info(data);
-            }
-
-            logger.info($return, data);
+        if ($return === false) {
+            logger.info(data);
         }
+
+        logger.info($return, data);
     }
 }
 
