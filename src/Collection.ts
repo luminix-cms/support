@@ -1065,7 +1065,6 @@ export default class Collection<T> extends EventSource<CollectionEvents<T>> {
         }));
     }
 
-
     sortDesc(): Collection<T> {
         return this.sort((a, b) => {
             if (a > b) {
