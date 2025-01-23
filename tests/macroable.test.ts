@@ -4,11 +4,11 @@ import Macroable from '../src/Mixins/Macroable';
 class TestMacroedClass {
 
     foo() {
-        return this.bar();
+        return 'foo';
     }
 
     bar() {
-        return 1;
+        return 'bar';
     }
 
 }
@@ -18,9 +18,14 @@ describe('testing macroable class', () => {
     test('create class and make a macro function', async () => {
         const testClass = new (Macroable(TestMacroedClass));
 
-        testClass.macro('baz', () => testClass.foo());
+        testClass.macro('baz', () => 'baz');
 
-        expect(testClass.baz()).toBe(1);
+        // metodos originais continuam funcionando
+        expect(testClass.foo()).toBe('foo');
+        expect(testClass.bar()).toBe('bar');
+
+        // metodo macro criado funcional
+        expect(testClass.baz()).toBe('baz');
     });
 
     test('create class and check for macro function', async () => {
@@ -35,10 +40,11 @@ describe('testing macroable class', () => {
         const testClass = new (Macroable(TestMacroedClass))();
 
         testClass.macro('baz', () => testClass.foo());
-        
         testClass.flushMacros();
 
         expect(Object.keys(testClass._macros).length).toBe(0);
+        expect(() => testClass.baz()).toThrow('testClass.baz is not a function');
+
     });
     
 });

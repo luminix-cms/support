@@ -2,6 +2,8 @@
 import Application from '../src/App/Application';
 import ServiceProvider from '../src/App/ServiceProvider';
 
+class Subject {}
+
 class TestProvider extends ServiceProvider {
 
 }
@@ -71,27 +73,28 @@ describe('testing application class', () => {
     test('app with multi-instance facade', async () => {
         const app = new TestApp();
 
-        app.create();
+        app.bind('lorem', () => new Subject());
 
-        app.bind('lorem', () => 'ipsum');
+        app.create();
 
         const a = app.make('lorem');
         const b = app.make('lorem');
 
-        expect(a).not.toEqual(b);
+        expect(a).not.toBe(b);
     });
 
     test('app with single-instance facade', async () => {
         const app = new TestApp();
 
+        app.singleton('lorem', () => new Subject());
+
         app.create();
 
-        app.singleton('lorem', () => 'ipsum');
 
         const a = app.make('lorem');
         const b = app.make('lorem');
 
-        expect(a).toEqual(b);
+        expect(a).toBe(b);
     });
 
     test('flush app', async () => {
@@ -106,5 +109,9 @@ describe('testing application class', () => {
 
         expect(callback).toHaveBeenCalledTimes(1);
     });
+
+    // verificar se os metodos boot e register dos providers são chamados durante o App.create()
+
+    // verificar se o metodo flush dos providers é chamado durante o App.flush()
 
 });

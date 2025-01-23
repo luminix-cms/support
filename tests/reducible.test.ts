@@ -34,11 +34,13 @@ describe('testing reducible class', () => {
     test('create class and flush especific reduced function', async () => {
         const testClass = new (Reducible(TestReducedClass))();
 
+        const narf_2 = jest.fn();
+
         testClass.reducer('narf_1', jest.fn());
-        testClass.reducer('narf_2', jest.fn());
+        testClass.reducer('narf_2', narf_2);
         testClass.reducer('narf_3', jest.fn());
         
-        testClass.removeReducer('narf_2', jest.fn());
+        testClass.removeReducer('narf_2', narf_2);
 
         expect(testClass.hasReducer('narf_2')).toBe(false);
     });
@@ -67,6 +69,23 @@ describe('testing reducible class', () => {
             
             expect(reducer.count()).toBe(0);
         });
+
+
+        expect(testClass.baz(1)).toBe(1);
+
+    });
+
+    test('check if function is called in reduced function', async () => {
+        const testClass = new (Reducible(TestReducedClass))();
+
+        const bar = jest.fn().mockReturnValue(2);
+
+        testClass.reducer('baz', (value: number) => value + bar());
+
+        testClass.baz(1);
+
+        expect(bar).toHaveBeenCalledTimes(1);
+        expect(testClass.baz(1)).toBe(3);
     });
     
 });
