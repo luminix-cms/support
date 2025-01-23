@@ -51,14 +51,6 @@ export default class Application<TContainers extends Record<string, any> = Recor
         }
     }
 
-    /**
-     * Bind a service as a singleton.
-     * 
-     * When called, the service will create distinct instances, for each request.
-     * 
-     * @param abstract 
-     * @param concrete 
-     */
     bind<K extends keyof TContainers>(abstract: K, concrete: () => TContainers[K]): void
     {
         if (typeof abstract !== 'string') {
@@ -67,14 +59,6 @@ export default class Application<TContainers extends Record<string, any> = Recor
         this.loaders[abstract] = { loader: concrete };
     }
 
-    /**
-     * Bind a service as a singleton.
-     * 
-     * When called, the service will be instantiated only once, even if it is requested multiple times.
-     * 
-     * @param abstract 
-     * @param concrete 
-     */
     singleton<K extends keyof TContainers>(abstract: K, concrete: () => TContainers[K]): void
     {
         if (typeof abstract !== 'string') {

@@ -4,23 +4,28 @@ import Reducible from '../src/Mixins/Reducible';
 class TestReducedClass {
 
     foo() {
-        return this.bar();
+        return 1;
     }
 
     bar() {
-        return 1;
+        return 2;
     }
 
 }
 
 describe('testing reducible class', () => {
 
-    test('create class and validate reduced function', async () => {
+    test('check if function is called in reduced function', async () => {
         const testClass = new (Reducible(TestReducedClass))();
 
-        testClass.reducer('baz', (value: number) => value + testClass.foo());
+        const bar = jest.fn().mockReturnValue(2);
 
-        expect(testClass.baz(1)).toBe(2);
+        testClass.reducer('baz', (value: number) => value + bar());
+
+        testClass.baz(1);
+
+        expect(bar).toHaveBeenCalledTimes(1);
+        expect(testClass.baz(1)).toBe(3);
     });
 
     test('create class and check for reduced function', async () => {
@@ -70,22 +75,7 @@ describe('testing reducible class', () => {
             expect(reducer.count()).toBe(0);
         });
 
-
         expect(testClass.baz(1)).toBe(1);
-
-    });
-
-    test('check if function is called in reduced function', async () => {
-        const testClass = new (Reducible(TestReducedClass))();
-
-        const bar = jest.fn().mockReturnValue(2);
-
-        testClass.reducer('baz', (value: number) => value + bar());
-
-        testClass.baz(1);
-
-        expect(bar).toHaveBeenCalledTimes(1);
-        expect(testClass.baz(1)).toBe(3);
     });
     
 });

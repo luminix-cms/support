@@ -1,6 +1,7 @@
 
-import { AxiosResponse } from 'axios';
 import Obj from '../Obj';
+
+import { AxiosResponse } from 'axios';
 
 export default class Response<TResponse = any, TData = any> {
 
@@ -173,7 +174,5 @@ export default class Response<TResponse = any, TData = any> {
     throwIfServerError(): this {
         return this.serverError() ? this.throw() : this;
     }
-    
 
 };
-

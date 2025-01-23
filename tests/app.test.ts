@@ -6,16 +6,32 @@ class Subject {}
 
 class TestProvider extends ServiceProvider {
 
+    boot() { }
+
+    register() { }
+
+    flush() { }
+    
+}
+
+class AnotherTestProvider extends ServiceProvider {
+
+    boot() { }
+
+    register() { }
+
+    flush() { }
+    
 }
 
 class TestApp extends Application {
 
     foo() {
-        return this.bar();
+        return 1;
     }
 
     bar() {
-        return 1;
+        return 2;
     }
 
 }
@@ -70,12 +86,12 @@ describe('testing application class', () => {
         expect(app.dump(true).configuration).toStrictEqual(testConfig);
     });
 
-    test('app with multi-instance facade', async () => {
+    test('app with multi-instance', async () => {
         const app = new TestApp();
 
-        app.bind('lorem', () => new Subject());
-
         app.create();
+
+        app.bind('lorem', () => new Subject());
 
         const a = app.make('lorem');
         const b = app.make('lorem');
@@ -83,13 +99,12 @@ describe('testing application class', () => {
         expect(a).not.toBe(b);
     });
 
-    test('app with single-instance facade', async () => {
+    test('app with single-instance', async () => {
         const app = new TestApp();
-
-        app.singleton('lorem', () => new Subject());
 
         app.create();
 
+        app.singleton('lorem', () => new Subject());
 
         const a = app.make('lorem');
         const b = app.make('lorem');
@@ -110,8 +125,47 @@ describe('testing application class', () => {
         expect(callback).toHaveBeenCalledTimes(1);
     });
 
-    // verificar se os metodos boot e register dos providers são chamados durante o App.create()
+    test('create app validate providers boot method', async () => {
+        const app = new TestApp();
 
-    // verificar se o metodo flush dos providers é chamado durante o App.flush()
+        app.withProviders([ TestProvider, AnotherTestProvider ]);
+
+        const a = jest.spyOn(TestProvider.prototype, 'boot');
+        const b = jest.spyOn(AnotherTestProvider.prototype, 'boot');
+
+        app.create();
+
+        expect(a).toHaveBeenCalledTimes(1);
+        expect(b).toHaveBeenCalledTimes(1);
+    });
+
+    test('create app validate providers register method', async () => {
+        const app = new TestApp();
+
+        app.withProviders([ TestProvider, AnotherTestProvider ]);
+        
+        const a = jest.spyOn(TestProvider.prototype, 'register');
+        const b = jest.spyOn(AnotherTestProvider.prototype, 'register');
+
+        app.create();
+
+        expect(a).toHaveBeenCalledTimes(1);
+        expect(b).toHaveBeenCalledTimes(1);
+    });
+
+    test('create app validate providers flush method', async () => {
+        const app = new TestApp();
+
+        app.withProviders([ TestProvider, AnotherTestProvider ]);
+        
+        const a = jest.spyOn(TestProvider.prototype, 'flush');
+        const b = jest.spyOn(AnotherTestProvider.prototype, 'flush');
+
+        app.create();
+        app.flush();
+
+        expect(a).toHaveBeenCalledTimes(1);
+        expect(b).toHaveBeenCalledTimes(1);
+    });
 
 });

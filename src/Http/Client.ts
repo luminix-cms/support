@@ -1,11 +1,10 @@
 
-import { AxiosRequestConfig } from 'axios';
-import Obj from '../Obj';
 import Request from './Request';
+import Obj from '../Obj';
 
+import { AxiosRequestConfig } from 'axios';
 
 export type RequestOptions = Omit<AxiosRequestConfig, 'url' | 'method'>;
-
 
 export default class Client {
 
@@ -175,4 +174,3 @@ export default class Client {
     }
 
 };
-
