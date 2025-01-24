@@ -6,9 +6,9 @@ import isValidationError from '../src/Http/Utils/isValidationError';
 
 import mockAxios, { AxiosError, AxiosHeaders } from 'axios';
 
-describe('testing http client', () => {
+describe('automated http client test', () => {
 
-    test('create client and change url before request', async () => {
+    test('make client and change url before request', async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -35,7 +35,7 @@ describe('testing http client', () => {
         expect(response.successful()).toBe(true);
     });
 
-    // test('create client form request', async () => {
+    // test('make client form request', async () => {
 
     //     (mockAxios as any).mockClear();
     //     (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -63,7 +63,7 @@ describe('testing http client', () => {
     //     expect(response.successful()).toBe(true);
     // });
 
-    test("create client which 'accept' is custom", async () => {
+    test("make client which 'accept' is custom", async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -91,7 +91,7 @@ describe('testing http client', () => {
         expect(response.successful()).toBe(true);
     });
 
-    test("create client which 'accept' is json", async () => {
+    test("make client which 'accept' is json", async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -119,7 +119,7 @@ describe('testing http client', () => {
         expect(response.successful()).toBe(true);
     });
 
-    // test("create client with custom headers", async () => {
+    // test("make client with custom headers", async () => {
 
     //     (mockAxios as any).mockClear();
     //     (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -153,7 +153,7 @@ describe('testing http client', () => {
     //     expect(response.successful()).toBe(true);
     // });
 
-    test("create client with replaced custom headers", async () => {
+    test("make client with replaced custom headers", async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -190,7 +190,7 @@ describe('testing http client', () => {
         expect(response.successful()).toBe(true);
     });
 
-    // test("create client with custom options", async () => {
+    // test("make client with custom options", async () => {
 
     //     (mockAxios as any).mockClear();
     //     (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -229,7 +229,7 @@ describe('testing http client', () => {
     //     expect(response.successful()).toBe(true);
     // });
 
-    test("create client with replaced custom options", async () => {
+    test("make client with replaced custom options", async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -276,7 +276,7 @@ describe('testing http client', () => {
         expect(response.successful()).toBe(true);
     });
 
-    test("create client with query parameters", async () => {
+    test("make client with query parameters", async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -302,7 +302,7 @@ describe('testing http client', () => {
         expect(response.successful()).toBe(true);
     });
 
-    test("create client with replaced query parameters", async () => {
+    test("make client with replaced query parameters", async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -330,7 +330,7 @@ describe('testing http client', () => {
         expect(response.successful()).toBe(true);
     });
 
-    test('create client with custom data', async () => {
+    test('make client with custom data', async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -359,7 +359,7 @@ describe('testing http client', () => {
         expect(response.successful()).toBe(true);
     });
 
-    test('create client with replaced custom data', async () => {
+    test('make client with replaced custom data', async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -390,7 +390,7 @@ describe('testing http client', () => {
         expect(response.successful()).toBe(true);
     });
 
-    test('create client with basic auth', async () => {
+    test('make client with basic auth', async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -433,7 +433,7 @@ describe('testing http client', () => {
         expect(response.successful()).toBe(true);
     });
 
-    test('create client with auth token', async () => {
+    test('make client with auth token', async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -476,7 +476,7 @@ describe('testing http client', () => {
         expect(response.successful()).toBe(true);
     });
 
-    test('create client get request', async () => {
+    test('make client get request', async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -502,7 +502,7 @@ describe('testing http client', () => {
         expect(response.json('user.name')).toBe('test 1');
     });
 
-    test('create client post request', async () => {
+    test('make client post request', async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -528,7 +528,7 @@ describe('testing http client', () => {
         expect(response.json('user.id')).toBe(2);
     });
 
-    test('create client post request validation', async () => {
+    test('make client post request validation', async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -549,7 +549,7 @@ describe('testing http client', () => {
         expect(isValidationError(response)).toBe(false);
     });
 
-    test('create client post request validation error', async () => {
+    test('make client post request validation error', async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({
@@ -572,7 +572,7 @@ describe('testing http client', () => {
         expect(isValidationError(response)).toBe(true);
     });
 
-    test('create client put request', async () => {
+    test('make client put request', async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -599,7 +599,7 @@ describe('testing http client', () => {
         expect(response.json('user.name')).toBe('test 3');
     });
 
-    test('create client patch request', async () => {
+    test('make client patch request', async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -626,7 +626,7 @@ describe('testing http client', () => {
         expect(response.json('user.name')).toBe('test 3');
     });
 
-    test('create client delete request', async () => {
+    test('make client delete request', async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 

@@ -13,7 +13,7 @@ class TestMacroedClass {
 
 }
 
-describe('testing macroable class', () => {
+describe('automated macroable test', () => {
 
     test('create class and make a macro function', async () => {
         const testClass = new (Macroable(TestMacroedClass));

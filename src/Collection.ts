@@ -115,7 +115,6 @@ export default class Collection<T> extends EventSource<CollectionEvents<T>> {
         return new Collection<unknown>(this.#items.flat());
     }
 
-
     collect(): Collection<T> {
         return new Collection(this.#items);
     }
@@ -133,7 +132,6 @@ export default class Collection<T> extends EventSource<CollectionEvents<T>> {
 
         return combined;
     }
-
 
     concat(collection: Collection<unknown> | unknown[]): Collection<unknown> {
         if (!Array.isArray(collection)) {
@@ -224,7 +222,6 @@ export default class Collection<T> extends EventSource<CollectionEvents<T>> {
             })
         ));
     }
-        
 
     diff(collection: Collection<T> | T[]): Collection<T> {
         if (!Array.isArray(collection)) {
@@ -280,7 +277,6 @@ export default class Collection<T> extends EventSource<CollectionEvents<T>> {
             return carry;
         }, [] as T[]));
     }
-
 
     duplicatesStrict(): Collection<T>;
     duplicatesStrict<K extends keyof T>(key: K): Collection<T[K]>;
@@ -361,7 +357,6 @@ export default class Collection<T> extends EventSource<CollectionEvents<T>> {
         return new Collection(this.#items.filter((_, index) => !indexes.includes(index)));
     }
 
-
     filter(callback?: CollectionIteratorCallback<T, boolean>): Collection<T> {
         return new Collection(this.#items.filter((item, index) => {
             if (typeof callback !== 'function') {
@@ -370,7 +365,6 @@ export default class Collection<T> extends EventSource<CollectionEvents<T>> {
             return callback(item, index, this);
         }));
     }
-
 
     first(callback?: CollectionIteratorCallback<T, boolean>): T | null {
         if (typeof callback === 'function') {

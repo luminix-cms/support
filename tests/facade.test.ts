@@ -33,9 +33,9 @@ class TestService {
 
 type AppContainers = { 'test': TestService };
 
-describe('testing class with facade', () => {
+describe('automated facade test', () => {
 
-    test('create class, add facade accessor and retrieve function result', async () => {
+    test('create app, make facade and retrieve function result', async () => {
         const testApp = new Application<AppContainers>([ TestServiceProvider ]);
         const Test = MakeFacade<TestService, TestFacadeClass>(TestFacadeClass, testApp);
 

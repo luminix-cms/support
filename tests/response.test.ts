@@ -3,9 +3,9 @@ import Client from '../src/Http/Client';
 
 import mockAxios, { AxiosError, AxiosHeaders } from 'axios';
 
-describe('testing http client response', () => {
+describe('automated http response test', () => {
 
-    test('create client request response body', async () => {
+    test('make client request response body', async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -25,7 +25,7 @@ describe('testing http client response', () => {
         expect(response.body()).toBe('{"user":{"id":1,"name":"test 1"},"message":"user found"}');
     });
 
-    test('create client request response json', async () => {
+    test('make client request response json', async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -42,13 +42,13 @@ describe('testing http client response', () => {
         expect(mockAxios).toHaveBeenCalledTimes(1);
 
         expect(response.successful()).toBe(true);
-        expect(response.json()).toMatchObject({ 
+        expect(response.json()).toEqual({ 
             user: { id: 1, name: 'test 1' }, 
             message: 'user found' 
         });
     });
 
-    test('create client request response json has key', async () => {
+    test('make client request response json has key', async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -71,7 +71,7 @@ describe('testing http client response', () => {
         expect(response.has('message')).toBe(true);
     });
 
-    test('create client request response status', async () => {
+    test('make client request response status', async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -91,7 +91,7 @@ describe('testing http client response', () => {
         expect(response.status()).toBe(200);
     });
 
-    test("create client request response 'ok' status", async () => {
+    test("make client request response 'ok' status", async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -111,7 +111,7 @@ describe('testing http client response', () => {
         expect(response.ok()).toBe(true);
     });
 
-    test("create client request response 'created' status", async () => {
+    test("make client request response 'created' status", async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -131,7 +131,7 @@ describe('testing http client response', () => {
         expect(response.created()).toBe(true);
     });
 
-    test("create client request response 'accepted' status", async () => {
+    test("make client request response 'accepted' status", async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -151,7 +151,7 @@ describe('testing http client response', () => {
         expect(response.accepted()).toBe(true);
     });
 
-    test("create client request response 'no content' status", async () => {
+    test("make client request response 'no content' status", async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -171,7 +171,7 @@ describe('testing http client response', () => {
         expect(response.noContent()).toBe(true);
     });
 
-    test("create client request response 'moved permanently' status", async () => {
+    test("make client request response 'moved permanently' status", async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -192,7 +192,7 @@ describe('testing http client response', () => {
         expect(response.movedPermanently()).toBe(true);
     });
 
-    test("create client request response 'found' status", async () => {
+    test("make client request response 'found' status", async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -213,7 +213,7 @@ describe('testing http client response', () => {
         expect(response.found()).toBe(true);
     });
 
-    test("create client request response 'bad request' status", async () => {
+    test("make client request response 'bad request' status", async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -234,7 +234,7 @@ describe('testing http client response', () => {
         expect(response.badRequest()).toBe(true);
     });
 
-    test("create client request response 'unauthorized' status", async () => {
+    test("make client request response 'unauthorized' status", async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -255,7 +255,7 @@ describe('testing http client response', () => {
         expect(response.unauthorized()).toBe(true);
     });
 
-    test("create client request response 'payment required' status", async () => {
+    test("make client request response 'payment required' status", async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -276,7 +276,7 @@ describe('testing http client response', () => {
         expect(response.paymentRequired()).toBe(true);
     });
 
-    test("create client request response 'forbidden' status", async () => {
+    test("make client request response 'forbidden' status", async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -297,7 +297,7 @@ describe('testing http client response', () => {
         expect(response.forbidden()).toBe(true);
     });
 
-    test("create client request response 'not found' status", async () => {
+    test("make client request response 'not found' status", async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -318,7 +318,7 @@ describe('testing http client response', () => {
         expect(response.notFound()).toBe(true);
     });
 
-    test("create client request response 'request timeout' status", async () => {
+    test("make client request response 'request timeout' status", async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -339,7 +339,7 @@ describe('testing http client response', () => {
         expect(response.requestTimeout()).toBe(true);
     });
 
-    test("create client request response 'conflict' status", async () => {
+    test("make client request response 'conflict' status", async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -360,7 +360,7 @@ describe('testing http client response', () => {
         expect(response.conflict()).toBe(true);
     });
 
-    test("create client request response 'unprocessable entity' status", async () => {
+    test("make client request response 'unprocessable entity' status", async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -381,7 +381,7 @@ describe('testing http client response', () => {
         expect(response.unprocessableEntity()).toBe(true);
     });
 
-    test("create client request response 'too many requests' status", async () => {
+    test("make client request response 'too many requests' status", async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -402,7 +402,7 @@ describe('testing http client response', () => {
         expect(response.tooManyRequests()).toBe(true);
     });
 
-    test('create client request response success status', async () => {
+    test('make client request response success status', async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -423,7 +423,7 @@ describe('testing http client response', () => {
         expect(response.status()).toBeLessThanOrEqual(299);
     });
 
-    test('create client request response not success status', async () => {
+    test('make client request response not success status', async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -443,7 +443,7 @@ describe('testing http client response', () => {
         expect(response.status()).toBeGreaterThanOrEqual(300);
     });
 
-    test('create client request response redirect', async () => {
+    test('make client request response redirect', async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -465,7 +465,7 @@ describe('testing http client response', () => {
         expect(response.status()).toBeLessThanOrEqual(399);
     });
 
-    test('create client request response client side error', async () => {
+    test('make client request response client side error', async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -487,7 +487,7 @@ describe('testing http client response', () => {
         expect(response.status()).toBeLessThanOrEqual(499);
     });
 
-    test('create client request response server side error', async () => {
+    test('make client request response server side error', async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -508,7 +508,7 @@ describe('testing http client response', () => {
         expect(response.status()).toBeGreaterThanOrEqual(500);
     });
 
-    test('create client request response server side error', async () => {
+    test('make client request response server side error', async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -529,7 +529,7 @@ describe('testing http client response', () => {
         expect(response.status()).toBeGreaterThanOrEqual(400);
     });
 
-    test('create client request response has header', async () => {
+    test('make client request response has header', async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -557,7 +557,7 @@ describe('testing http client response', () => {
         expect(response.header('Accept')).toBe('application/json');
     });
 
-    test('create client request response headers', async () => {
+    test('make client request response headers', async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -582,12 +582,12 @@ describe('testing http client response', () => {
         });
 
         expect(response.successful()).toBe(true);
-        expect(response.headers()).toMatchObject({ 
+        expect(response.headers()).toEqual({ 
             'Accept': 'application/json', 
         });
     });
 
-    test('create client request response error', async () => {
+    test('make client request response error', async () => {
         
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.reject(new AxiosError(
@@ -616,7 +616,7 @@ describe('testing http client response', () => {
         expect(response.serverError()).toBe(true);
     });
 
-    test('create client request response throw error if', async () => {
+    test('make client request response throw error if', async () => {
         
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.reject(new AxiosError(
@@ -650,7 +650,7 @@ describe('testing http client response', () => {
         )).toThrow('error message');
     });
 
-    test('create client request response throw error unless', async () => {
+    test('make client request response throw error unless', async () => {
         
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.reject(new AxiosError(
@@ -685,7 +685,7 @@ describe('testing http client response', () => {
         )).toThrow('error message');
     });
 
-    test('create client request response throw error if status is', async () => {
+    test('make client request response throw error if status is', async () => {
         
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.reject(new AxiosError(
@@ -719,7 +719,7 @@ describe('testing http client response', () => {
         )).toThrow('error message');
     });
 
-    test('create client request response throw error unless status is', async () => {
+    test('make client request response throw error unless status is', async () => {
         
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.reject(new AxiosError(
@@ -755,7 +755,7 @@ describe('testing http client response', () => {
         )).toThrow('error message');
     });
 
-    test('create client request response throw if client error', async () => {
+    test('make client request response throw if client error', async () => {
         
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.reject(new AxiosError(
@@ -788,7 +788,7 @@ describe('testing http client response', () => {
         expect(() => response.throwIfClientError()).toThrow('client error');
     });
 
-    test('create client request response throw if server error', async () => {
+    test('make client request response throw if server error', async () => {
         
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.reject(new AxiosError(

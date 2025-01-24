@@ -13,7 +13,7 @@ class TestReducedClass {
 
 }
 
-describe('testing reducible class', () => {
+describe('automated reducible tests', () => {
 
     test('check if function is called in reduced function', async () => {
         const testClass = new (Reducible(TestReducedClass))();

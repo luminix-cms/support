@@ -36,7 +36,7 @@ class TestApp extends Application {
 
 }
 
-describe('testing application class', () => {
+describe('automated application test', () => {
 
     const testConfig = {
         name: 'Test App',
