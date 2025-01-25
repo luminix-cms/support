@@ -7,6 +7,8 @@ export default function collect<T = unknown>(items: T[]) {
 
 describe('automated collection test', () => {
 
+    const empty_collection = collect([]);
+
     const obj_collection_1 = collect([
         { name: 'iPhone 6', brand: 'Apple', type: 'phone', released: 2014 },
         { name: 'iPhone 5', brand: 'Apple', type: 'phone', released: 2012 },
@@ -62,6 +64,8 @@ describe('automated collection test', () => {
 
     const string_collection_2 = collect([ 'lorem', 'ipsum' ]) as Collection<string>;
 
+    /* * * * */
+
     const number_collection_1 = collect([ 1, 2.0, 3.3, 4.567, 0.5, 10 ]) as Collection<number>;
 
     const number_collection_2 = collect([ 10, 20, 20, 30, 30, 30 ]) as Collection<number>;
@@ -84,6 +88,12 @@ describe('automated collection test', () => {
     // const array_of_number_collection_3 = collect([ [ 1, 2 ], [ 10, 20, 30 ] ]) as Collection<number[]>;
 
     /* * * * */
+
+    test('check collection item type', async () => {
+        const result = number_collection_1.ensure('number');
+
+        expect(result).toEqual(number_collection_1);
+    });
 
     test('retrieve all collection items', async () => {
         const result = obj_collection_1.all();
@@ -369,6 +379,207 @@ describe('automated collection test', () => {
         expect(result).toEqual({ name: 'Galaxy S6', brand: 'Samsung', type: 'phone', released: 2015 });
     });
 
+    test('retrieve collection last item', async () => {
+        const result = obj_collection_1.last((item) => {
+            return (item as Record<string, any>).brand === 'Apple';
+        });
+
+        expect(result).toEqual({ name: 'Apple Watch', brand: 'Apple', type: 'watch', released: 2015 });
+    });
+
+    test('retrieve collection items mapped', async () => {
+        const result = obj_collection_2.flatMap((item, index) => {
+            (item as Record<string, any>).weight = 1 * (index + 1)
+            return item;
+        });
+
+        expect(result.toArray()).toEqual(([
+            { name: 'iPhone 10', brand: 'Apple', type: 'phone', released: 2018, weight: 1 },
+            { name: 'iPhone 9', brand: 'Apple', type: 'phone', released: 2017, weight: 2 },
+            { name: 'iPhone 8', brand: 'Apple', type: 'phone', released: 2016, weight: 3 },
+        ]));
+    });
+
+    test('retrieve collection with forgotten item', async () => {
+        const result = number_collection_3.forget(1);
+
+        // expect(result.toArray()).toContain(([ 20, 40 ]));
+        expect(result.toArray()).not.toContain(([ 30 ]));
+    });
+
+    test('retrieve collection with items for page', async () => {
+        const result = number_collection_2.forPage(2, 3);
+        
+        expect(result.toArray()).toEqual(([ 30, 30, 30 ]));
+    });
+
+    test('retrieve collection item', async () => {
+        const result_1 = number_collection_2.get(3);
+        const result_2 = obj_collection_1.get(2);
+        
+        expect(result_1).toBe(30);
+        expect(result_2).toEqual({ name: 'Apple Watch', brand: 'Apple', type: 'watch', released: 2015 });
+    });
+
+    test('retrieve collection items grouped by key', async () => {
+        const result = obj_collection_1.groupBy('brand' as never);
+        
+        expect(result).toEqual({ 
+            Apple: [
+                { name: 'iPhone 6', brand: 'Apple', type: 'phone', released: 2014 },
+                { name: 'iPhone 5', brand: 'Apple', type: 'phone', released: 2012 },
+                { name: 'Apple Watch', brand: 'Apple', type: 'watch', released: 2015 },
+            ], 
+            Samsung: [
+                { name: 'Galaxy S6', brand: 'Samsung', type: 'phone', released: 2015 },
+                { name: 'Galaxy Gear', brand: 'Samsung', type: 'watch', released: 2013 },
+            ]
+        });
+    });
+
+    test('retrieve collection items grouped by keys', async () => {
+        const result = obj_collection_1.groupBy(['brand', 'type'] as never[]);
+        
+        expect(result).toEqual({ 
+            Apple: {
+                phone: [
+                    { name: 'iPhone 6', brand: 'Apple', type: 'phone', released: 2014 },
+                    { name: 'iPhone 5', brand: 'Apple', type: 'phone', released: 2012 },
+                ],
+                watch: [
+                    { name: 'Apple Watch', brand: 'Apple', type: 'watch', released: 2015 },
+                ]
+            }, 
+            Samsung: {
+                phone: [
+                    { name: 'Galaxy S6', brand: 'Samsung', type: 'phone', released: 2015 },
+                ],
+                watch: [
+                    { name: 'Galaxy Gear', brand: 'Samsung', type: 'watch', released: 2013 },
+                ]
+            }
+        });
+    });
+
+    // test('retrieve collection items grouped by callback fn', async () => {
+    //     const result = obj_collection_1.groupBy((item) => ((item as Record<string, any>).released >= 2014) as never);
+        
+    //     expect(result).toEqual({ 
+    //         released: [
+    //             { name: 'iPhone 6', brand: 'Apple', type: 'phone', released: 2014 },
+    //             { name: 'Apple Watch', brand: 'Apple', type: 'watch', released: 2015 },
+    //             { name: 'Galaxy S6', brand: 'Samsung', type: 'phone', released: 2015 },
+    //         ]
+    //     });
+    // });
+
+    test('retrieve collection has item by index', async () => {
+        const result_1 = obj_collection_1.has(2);
+        const result_2 = obj_collection_1.has(5);
+        
+        expect(result_1).toBe(true);
+        expect(result_2).toBe(false);
+    });
+
+    test('retrieve collection has items by indexes', async () => {
+        const result_1 = obj_collection_1.hasAny([ 0, 2 ]);
+        const result_2 = obj_collection_1.hasAny([ 5, 7, 9 ]);
+        
+        expect(result_1).toBe(true);
+        expect(result_2).toBe(false);
+    });
+
+    test('retrieve collection implode', async () => {
+        const result = string_collection_1.implode(',');
+        
+        expect(result).toEqual('foo,bar,baz');
+    });
+
+    test('retrieve collection implode by key', async () => {
+        const result = obj_collection_2.implode('name' as never, ',');
+        
+        expect(result).toEqual('iPhone 10,iPhone 9,iPhone 8');
+    });
+
+    test('retrieve collection implode by callback', async () => {
+        const result = obj_collection_2.implode((item, index) => `${(item as Record<string, any>).name} ${index + 1}` , ',');
+        
+        expect(result).toEqual('iPhone 10 1,iPhone 9 2,iPhone 8 3');
+    });
+
+    // test('retrieve collection intersection', async () => {
+    //     const result = obj_collection_1.intersect(obj_collection_4);
+
+    //     expect(result.toArray()).toEqual(([
+    //         { name: 'iPhone 6', brand: 'Apple', type: 'phone', released: 2014 },
+    //         { name: 'iPhone 5', brand: 'Apple', type: 'phone', released: 2012 },
+    //     ]));
+    // });
+
+    test('check if collection is empty', async () => {
+        const result_1 = empty_collection.isEmpty();
+        const result_2 = obj_collection_2.isEmpty();
+        
+        expect(result_1).toBe(true);
+        expect(result_2).toBe(false);
+    });
+
+    test('check if collection is not empty', async () => {
+        const result_1 = empty_collection.isNotEmpty();
+        const result_2 = obj_collection_2.isNotEmpty();
+        
+        expect(result_1).toBe(false);
+        expect(result_2).toBe(true);
+    });
+
+    test('retrieve collection join', async () => {
+        const result = string_collection_1.join(',');
+        
+        expect(result).toEqual('foo,bar,baz');
+    });
+
+    test('retrieve collection join final', async () => {
+        const result = string_collection_1.join(',', ' and ');
+        
+        expect(result).toEqual('foo,bar and baz');
+    });
+
+    test('retrieve collection key by', async () => {
+        const result_1 = obj_collection_1.keyBy('name' as never);
+        const result_2 = obj_collection_1.keyBy('brand' as never);
+        const result_3 = obj_collection_1.keyBy('released' as never);
+        
+        expect(result_1).toEqual({
+            'iPhone 6': { name: 'iPhone 6', brand: 'Apple', type: 'phone', released: 2014 },
+            'iPhone 5': { name: 'iPhone 5', brand: 'Apple', type: 'phone', released: 2012 },
+            'Apple Watch': { name: 'Apple Watch', brand: 'Apple', type: 'watch', released: 2015 },
+            'Galaxy S6': { name: 'Galaxy S6', brand: 'Samsung', type: 'phone', released: 2015 },
+            'Galaxy Gear': { name: 'Galaxy Gear', brand: 'Samsung', type: 'watch', released: 2013 },
+        });
+        expect(result_2).toEqual({
+            Apple: { name: 'Apple Watch', brand: 'Apple', type: 'watch', released: 2015 },
+            Samsung: { name: 'Galaxy Gear', brand: 'Samsung', type: 'watch', released: 2013 },
+        });
+        expect(result_3).toEqual({
+            2012: { name: 'iPhone 5', brand: 'Apple', type: 'phone', released: 2012 },
+            2013: { name: 'Galaxy Gear', brand: 'Samsung', type: 'watch', released: 2013 },
+            2014: { name: 'iPhone 6', brand: 'Apple', type: 'phone', released: 2014 },
+            2015: { name: 'Galaxy S6', brand: 'Samsung', type: 'phone', released: 2015 },
+        });
+    });
+
+    test('retrieve collection key by callback', async () => {
+        const result = obj_collection_1.keyBy((item, index) => `${(item as Record<string, any>).brand} ${index + 1}`);
+        
+        expect(result).toEqual({
+            'Apple 1': { name: 'iPhone 6', brand: 'Apple', type: 'phone', released: 2014 },
+            'Apple 2': { name: 'iPhone 5', brand: 'Apple', type: 'phone', released: 2012 },
+            'Apple 3': { name: 'Apple Watch', brand: 'Apple', type: 'watch', released: 2015 },
+            'Samsung 4': { name: 'Galaxy S6', brand: 'Samsung', type: 'phone', released: 2015 },
+            'Samsung 5': { name: 'Galaxy Gear', brand: 'Samsung', type: 'watch', released: 2013 },
+        });
+    });
+
     // test('retrieve collection first or fail item', async () => {
     //     const result = obj_collection_1.firstOrFail((item) => {
     //         return (item as Record<string, any>).brand === 'Motorola';
@@ -376,12 +587,6 @@ describe('automated collection test', () => {
 
     //     expect(result).toThrow('No matching item found');
     // });
-
-    test('check collection item type', async () => {
-        const result = number_collection_1.ensure('number');
-
-        expect(result).toEqual(number_collection_1);
-    });
 
     /* * * * */
 

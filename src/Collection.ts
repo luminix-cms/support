@@ -498,7 +498,6 @@ export default class Collection<T> extends EventSource<CollectionEvents<T>> {
 
     }
 
-
     has(index: number): boolean {
         return this.#items.length > index;
     }
