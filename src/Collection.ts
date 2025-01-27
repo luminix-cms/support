@@ -683,7 +683,6 @@ export default class Collection<T> extends EventSource<CollectionEvents<T>> {
         }
 
         return sorted[middle] ?? null;
-        
     }
 
     merge(values: Collection<T> | T[]): Collection<T>;
@@ -723,11 +722,10 @@ export default class Collection<T> extends EventSource<CollectionEvents<T>> {
         return Object.entries(counts)
             .filter(([, count]) => count === max)
             .map(([value]) => value) as T[K][];
-
     }
 
     nth(n: number, offset: number = 0): Collection<T> {
-        return this.chunk(n)//.get(offset) ?? collect();
+        return this.chunk(n) // .get(offset) ?? collect();
             .filter((chunk) => chunk.count() > offset)
             .map((chunk) => chunk.get(offset) as T);
     }
@@ -877,12 +875,12 @@ export default class Collection<T> extends EventSource<CollectionEvents<T>> {
 
             return index === -1 ? false : index;
         }
+
         const index = this.#items.findIndex((item, index) => {
             return (valueOrCallback as CollectionIteratorCallback<T, boolean>)(item, index, this);
         });
 
         return index === -1 ? false : index;
-
     }
 
     select<K extends Array<keyof T>>(keys: K): Collection<Pick<T, K[number]>> {
@@ -905,7 +903,6 @@ export default class Collection<T> extends EventSource<CollectionEvents<T>> {
             : new Collection(items);
     }
 
-
     shuffle(): Collection<T> {
         return new Collection(Arr.shuffle(this.#items));
     }
@@ -914,32 +911,30 @@ export default class Collection<T> extends EventSource<CollectionEvents<T>> {
         return new Collection(this.#items.slice(amount));
     }
 
-    skipUntil(callback: CollectionIteratorCallback<T, boolean>): Collection<T>;
     skipUntil(value: T): Collection<T>;
-    skipUntil(callback: CollectionIteratorCallback<T, boolean> | T): Collection<T> {
+    skipUntil(callback: CollectionIteratorCallback<T, boolean>): Collection<T>;
+    skipUntil(valueOrCallback: CollectionIteratorCallback<T, boolean> | T): Collection<T> {
 
-        if (typeof callback === 'function') {
+        if (typeof valueOrCallback === 'function') {
             return this.skip(this.#items.findIndex((item, index) => {
-                return (callback as CollectionIteratorCallback<T, boolean>)(item, index, this);
+                return (valueOrCallback as CollectionIteratorCallback<T, boolean>)(item, index, this);
             }));
         }
 
-        return this.skip(this.#items.findIndex((item) => item == callback));
-        
+        return this.skip(this.#items.findIndex((item) => item == valueOrCallback));
     }
 
-    skipWhile(callback: CollectionIteratorCallback<T, boolean>): Collection<T>;
     skipWhile(value: T): Collection<T>;
-    skipWhile(callback: CollectionIteratorCallback<T, boolean> | T): Collection<T> {
+    skipWhile(callback: CollectionIteratorCallback<T, boolean>): Collection<T>;
+    skipWhile(valueOrCallback: CollectionIteratorCallback<T, boolean> | T): Collection<T> {
 
-        if (typeof callback === 'function') {
+        if (typeof valueOrCallback === 'function') {
             return this.skip(this.#items.findIndex((item, index) => {
-                return !(callback as CollectionIteratorCallback<T, boolean>)(item, index, this);
+                return !(valueOrCallback as CollectionIteratorCallback<T, boolean>)(item, index, this);
             }));
         }
 
-        return this.skip(this.#items.findIndex((item) => item != callback));
-        
+        return this.skip(this.#items.findIndex((item) => item != valueOrCallback));
     }
 
     slice(start?: number, size?: number): Collection<T> {
@@ -955,9 +950,11 @@ export default class Collection<T> extends EventSource<CollectionEvents<T>> {
     }
 
     sliding(size: number, step: number = 1): Collection<Collection<T>> {
+
         const chunks = [];
+
         for (let i = 0; i < this.#items.length; i += step) {
-            if (i + size > this.#items.length) {
+            if ((i + size) > this.#items.length) {
                 break;
             }
             chunks.push(this.#items.slice(i, i + size));
@@ -999,21 +996,21 @@ export default class Collection<T> extends EventSource<CollectionEvents<T>> {
     sortBy(callback: CollectionIteratorCallback<T, number>): Collection<T>;
     sortBy(stack: ((a: T, b: T) => number)[]): Collection<T>;
     sortBy<K extends keyof T>(
-        keyOrCallback: K | CollectionIteratorCallback<T, number> | [K, 'asc' | 'desc'][] | ((a: T, b: T) => number)[],
+        keyOrColumnsOrCallback: K | CollectionIteratorCallback<T, number> | [K, 'asc' | 'desc'][] | ((a: T, b: T) => number)[],
         order: 'asc' | 'desc' = 'asc'
     ): Collection<T> {
-        if (typeof keyOrCallback === 'function') {
+        if (typeof keyOrColumnsOrCallback === 'function') {
             let index = -1;
             return new Collection(this.#items.toSorted((a, b) => {
                 index++;
-                return keyOrCallback(a, index, this) - keyOrCallback(b, index, this);
+                return keyOrColumnsOrCallback(a, index, this) - keyOrColumnsOrCallback(b, index, this);
             }));
         }
 
-        if (Array.isArray(keyOrCallback)) {
-            if (keyOrCallback.every((criteria) => Array.isArray(criteria))) {
+        if (Array.isArray(keyOrColumnsOrCallback)) {
+            if (keyOrColumnsOrCallback.every((criteria) => Array.isArray(criteria))) {
                 return new Collection(this.#items.toSorted((a, b) => {
-                    for (const [key, order] of keyOrCallback as [K, 'asc' | 'desc'][]) {
+                    for (const [key, order] of keyOrColumnsOrCallback as [K, 'asc' | 'desc'][]) {
                         const va = a[key] ?? -Infinity;
                         const vb = b[key] ?? -Infinity;
 
@@ -1029,7 +1026,7 @@ export default class Collection<T> extends EventSource<CollectionEvents<T>> {
             }
 
             return new Collection(this.#items.toSorted((a, b) => {
-                for (const sortFn of keyOrCallback as ((a: T, b: T) => number)[]) {
+                for (const sortFn of keyOrColumnsOrCallback as ((a: T, b: T) => number)[]) {
                     const result = sortFn(a, b);
                     if (result !== 0) {
                         return result;
@@ -1039,13 +1036,13 @@ export default class Collection<T> extends EventSource<CollectionEvents<T>> {
             }));
         }
 
-        if (typeof keyOrCallback !== 'string') {
+        if (typeof keyOrColumnsOrCallback !== 'string') {
             throw new TypeError('The key must be a string');
         }
 
         return new Collection(this.#items.toSorted((a, b) => {
-            const va = a[keyOrCallback] ?? -Infinity;
-            const vb = b[keyOrCallback] ?? -Infinity;
+            const va = a[keyOrColumnsOrCallback] ?? -Infinity;
+            const vb = b[keyOrColumnsOrCallback] ?? -Infinity;
 
             return va > vb
                 ? order === 'asc' ? 1 : -1
@@ -1109,7 +1106,6 @@ export default class Collection<T> extends EventSource<CollectionEvents<T>> {
         return this.chunk(chunkSize);
     }
 
-
     sum(): number;
     sum<K extends keyof T>(key: K): number;
     sum<K extends keyof T>(key?: K): number {
@@ -1130,7 +1126,6 @@ export default class Collection<T> extends EventSource<CollectionEvents<T>> {
             return carry + item;
         }, 0);
     }
-
 
     take(amount: number): Collection<T> {
         return new Collection(this.#items.slice(0, amount));
@@ -1199,8 +1194,8 @@ export default class Collection<T> extends EventSource<CollectionEvents<T>> {
         }
 
         emitChange(this);
+
         return this as unknown as Collection<T|R>;
-        
     }
 
     unique(): Collection<T>;
@@ -1349,28 +1344,28 @@ export default class Collection<T> extends EventSource<CollectionEvents<T>> {
         return new Collection(this.#items.filter((item) => item[key] >= min && item[key] <= max));
     }
 
-    whereIn<K extends keyof T>(key: K, values: T[K][]): Collection<T> {
-        return new Collection(this.#items.filter((item) => values.includes(item[key])));
-    }
-
-    whereInstanceOf<R extends Constructor<T>>(constructor: R): Collection<T> {
-        return new Collection(this.#items.filter((item) => item instanceof constructor));
-    }
-
     whereNotBetween<K extends keyof T>(key: K, [min, max]: [T[K], T[K]]): Collection<T> {
         return new Collection(this.#items.filter((item) => item[key] < min || item[key] > max));
+    }
+
+    whereIn<K extends keyof T>(key: K, values: T[K][]): Collection<T> {
+        return new Collection(this.#items.filter((item) => values.includes(item[key])));
     }
 
     whereNotIn<K extends keyof T>(key: K, values: T[K][]): Collection<T> {
         return new Collection(this.#items.filter((item) => !values.includes(item[key])));
     }
 
+    whereNull<K extends keyof T>(key: K): Collection<T> {
+        return new Collection(this.#items.filter((item) => item[key] === null));
+    }
+
     whereNotNull<K extends keyof T>(key: K): Collection<T> {
         return new Collection(this.#items.filter((item) => item[key] !== null));
     }
 
-    whereNull<K extends keyof T>(key: K): Collection<T> {
-        return new Collection(this.#items.filter((item) => item[key] === null));
+    whereInstanceOf<R extends Constructor<T>>(constructor: R): Collection<T> {
+        return new Collection(this.#items.filter((item) => item instanceof constructor));
     }
 
     zip<R>(items: Collection<R> | R[]): Collection<[T, NonNullable<R> | null]> {
@@ -1385,6 +1380,4 @@ export default class Collection<T> extends EventSource<CollectionEvents<T>> {
         );
     }
 
-
 }
-
