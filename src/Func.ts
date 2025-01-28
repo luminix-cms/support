@@ -59,7 +59,6 @@ class FuncStatic {
         return debounce(func, wait, options);
     }
 
-
 }
 
 const Func = new (Macroable<FuncMacros, typeof FuncStatic>(FuncStatic))();

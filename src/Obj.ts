@@ -9,20 +9,6 @@ export declare class ObjMacros {
 
 export class ObjStatic {
     
-    fromQuery(searchParams: URLSearchParams): Record<string, any> {
-        const object: Record<string, string> = {};
-    
-        for (const [key, value] of searchParams.entries()) {
-            this.set(object, key, value);
-        }
-    
-        return object;
-    }
-    
-    fromFormData(formData: FormData): Record<string, any> {
-        return this.fromQuery(formData as unknown as URLSearchParams);
-    }
-    
     get(object: any, path: string, defaultValue?: any): any {
         return _.get(object, path, defaultValue);
     }
@@ -59,9 +45,25 @@ export class ObjStatic {
     }
     
     set(object: any, path: string, value: any): void {
-        
-    
         _.set(object, path, value);
+    }
+    
+    unset(object: any, path: string): void {
+        _.unset(object, path);
+    }
+    
+    fromQuery(searchParams: URLSearchParams): Record<string, any> {
+        const object: Record<string, string> = {};
+    
+        for (const [key, value] of searchParams.entries()) {
+            this.set(object, key, value);
+        }
+    
+        return object;
+    }
+    
+    fromFormData(formData: FormData): Record<string, any> {
+        return this.fromQuery(formData as unknown as URLSearchParams);
     }
     
     toQuery(object: any): URLSearchParams {
@@ -70,10 +72,6 @@ export class ObjStatic {
     
     toFormData(object: any): FormData {
         return toPlatformData(object, new FormData()) as FormData;
-    }
-    
-    unset(object: any, path: string): void {
-        _.unset(object, path);
     }
 
 }

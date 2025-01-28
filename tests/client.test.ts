@@ -6,6 +6,10 @@ import isValidationError from '../src/Http/Utils/isValidationError';
 
 import mockAxios, { AxiosError, AxiosHeaders } from 'axios';
 
+beforeEach(() => {
+    jest.resetModules();
+});
+
 describe('automated http client test', () => {
 
     test('make client and change url before request', async () => {
@@ -35,33 +39,33 @@ describe('automated http client test', () => {
         expect(response.successful()).toBe(true);
     });
 
-    // test('make client form request', async () => {
+    test('make client form request', async () => {
 
-    //     (mockAxios as any).mockClear();
-    //     (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
-    //         data: { 
-    //             post: { text: 'lorem ipsum' }, 
-    //             message: 'post created' 
-    //         },
-    //         status: 200,
-    //     }));
+        (mockAxios as any).mockClear();
+        (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
+            data: { 
+                post: { text: 'lorem ipsum' }, 
+                message: 'post created' 
+            },
+            status: 200,
+        }));
 
-    //     const client = new Client();
+        const client = new Client();
 
-    //     client.asForm();
+        client.asForm();
 
-    //     const response = await client.post('/test-post', { id: 2 });
+        const response = await client.post('/test-post', { id: 2 });
 
-    //     expect(mockAxios).toHaveBeenCalledTimes(1);
-    //     expect(mockAxios).toHaveBeenCalledWith({
-    //         url: '/test-post',
-    //         method: 'post',
-    //         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    //         data: { id: 2 }
-    //     });
+        expect(mockAxios).toHaveBeenCalledTimes(1);
+        expect(mockAxios).toHaveBeenCalledWith({
+            url: '/test-post',
+            method: 'post',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            data: { id: 2 }
+        });
 
-    //     expect(response.successful()).toBe(true);
-    // });
+        expect(response.successful()).toBe(true);
+    });
 
     test("make client which 'accept' is custom", async () => {
 
@@ -119,39 +123,39 @@ describe('automated http client test', () => {
         expect(response.successful()).toBe(true);
     });
 
-    // test("make client with custom headers", async () => {
+    test("make client with custom headers", async () => {
 
-    //     (mockAxios as any).mockClear();
-    //     (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
-    //         data: { 
-    //             post: { text: 'lorem ipsum' }, 
-    //             message: 'post created' 
-    //         },
-    //         status: 200,
-    //     }));
+        (mockAxios as any).mockClear();
+        (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
+            data: { 
+                post: { text: 'lorem ipsum' }, 
+                message: 'post created' 
+            },
+            status: 200,
+        }));
 
-    //     const client = new Client();
+        const client = new Client();
 
-    //     client.withHeaders({
-    //         'Accept': 'application/json', 
-    //         'Content-Type': 'application/x-www-form-urlencoded', 
-    //     });
+        client.withHeaders({
+            'Accept': 'application/json', 
+            'Content-Type': 'application/x-www-form-urlencoded', 
+        });
 
-    //     const response = await client.post('/test-post', { id: 2 });
+        const response = await client.post('/test-post', { id: 2 });
 
-    //     expect(mockAxios).toHaveBeenCalledTimes(1);
-    //     expect(mockAxios).toHaveBeenCalledWith({
-    //         url: '/test-post',
-    //         method: 'post',
-    //         headers: { 
-    //             'Accept': 'application/json', 
-    //             'Content-Type': 'application/x-www-form-urlencoded', 
-    //         },
-    //         data: { id: 2 }
-    //     });
+        expect(mockAxios).toHaveBeenCalledTimes(1);
+        expect(mockAxios).toHaveBeenCalledWith({
+            url: '/test-post',
+            method: 'post',
+            headers: { 
+                'Accept': 'application/json', 
+                'Content-Type': 'application/x-www-form-urlencoded', 
+            },
+            data: { id: 2 }
+        });
 
-    //     expect(response.successful()).toBe(true);
-    // });
+        expect(response.successful()).toBe(true);
+    });
 
     test("make client with replaced custom headers", async () => {
 
@@ -190,44 +194,44 @@ describe('automated http client test', () => {
         expect(response.successful()).toBe(true);
     });
 
-    // test("make client with custom options", async () => {
+    test("make client with custom options", async () => {
 
-    //     (mockAxios as any).mockClear();
-    //     (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
-    //         data: { 
-    //             post: { text: 'lorem ipsum' }, 
-    //             message: 'post created' 
-    //         },
-    //         status: 200,
-    //     }));
+        (mockAxios as any).mockClear();
+        (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
+            data: { 
+                post: { text: 'lorem ipsum' }, 
+                message: 'post created' 
+            },
+            status: 200,
+        }));
 
-    //     const client = new Client();
+        const client = new Client();
 
-    //     client.withOptions({
-    //         baseURL: 'http://test.com',
-    //         headers: {
-    //             'Accept': 'application/json', 
-    //             'Content-Type': 'application/x-www-form-urlencoded', 
-    //         }, 
-    //         data: { id: 2 }
-    //     });
+        client.withOptions({
+            baseURL: 'http://test.com',
+            headers: {
+                'Accept': 'application/json', 
+                'Content-Type': 'application/x-www-form-urlencoded', 
+            }, 
+            data: { id: 2 }
+        });
 
-    //     const response = await client.post('/test-post', { id: 2 });
+        const response = await client.post('/test-post', { id: 2 });
 
-    //     expect(mockAxios).toHaveBeenCalledTimes(1);
-    //     expect(mockAxios).toHaveBeenCalledWith({
-    //         baseURL: 'http://test.com',
-    //         url: '/test-post',
-    //         method: 'post',
-    //         headers: { 
-    //             'Accept': 'application/json', 
-    //             'Content-Type': 'application/x-www-form-urlencoded', 
-    //         },
-    //         data: { id: 2 }
-    //     });
+        expect(mockAxios).toHaveBeenCalledTimes(1);
+        expect(mockAxios).toHaveBeenCalledWith({
+            baseURL: 'http://test.com',
+            url: '/test-post',
+            method: 'post',
+            headers: { 
+                'Accept': 'application/json', 
+                'Content-Type': 'application/x-www-form-urlencoded', 
+            },
+            data: { id: 2 }
+        });
 
-    //     expect(response.successful()).toBe(true);
-    // });
+        expect(response.successful()).toBe(true);
+    });
 
     test("make client with replaced custom options", async () => {
 

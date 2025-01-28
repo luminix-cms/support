@@ -1,6 +1,10 @@
 
 import Macroable from '../src/Mixins/Macroable';
 
+beforeEach(() => {
+    jest.resetModules();
+});
+
 class TestMacroedClass {
 
     foo() {

@@ -4,6 +4,10 @@ import ServiceProvider from '../src/App/ServiceProvider';
 
 import MakeFacade, { HasFacadeAccessor } from '../src/Mixins/MakeFacade';
 
+beforeEach(() => {
+    jest.resetModules();
+});
+
 class TestFacadeClass implements HasFacadeAccessor {
 
     getFacadeAccessor(): string {

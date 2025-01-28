@@ -2,6 +2,10 @@
 import Application from '../src/App/Application';
 import ServiceProvider from '../src/App/ServiceProvider';
 
+beforeEach(() => {
+    jest.resetModules();
+});
+
 class Subject {}
 
 class TestProvider extends ServiceProvider {
