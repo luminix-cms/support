@@ -194,24 +194,18 @@ describe('automated object test', () => {
 
     /**
      * @toReview
+     * @error TypeError: Invalid constructor, the constructor is not part of the custom element registry
      */
     test.skip('convert form data into object', async () => {
 
-        // const form = new HTMLFormElement();
+        const form = new HTMLFormElement();
 
-        // form.append('user.name', 'John Doe');
-        // form.append('posts.items.0.title', 'Post 1');
-        // form.append('posts.items.1.title', 'Post 2');
-        // form.append('posts.items.2.title', 'Post 3');
+        form.append('name', 'John Doe');
+        form.append('age', '30');
+        form.append('email', 'john@example.com');
+        form.append('password', 'password');
 
-        const form = {
-            name: 'John Doe',
-            age: 30,
-            email: 'john@example.com',
-            password: 'password',
-        } as unknown as HTMLFormElement;
-
-        const obj = Obj.fromFormData(new FormData(form as unknown as HTMLFormElement));
+        const obj = Obj.fromFormData(new FormData(form));
 
         expect(obj).toMatchObject({
             name: 'John Doe',
@@ -223,6 +217,7 @@ describe('automated object test', () => {
 
     /**
      * @toReview
+     * @error TypeError: (0 , axios_1.toFormData) is not a function
      */
     test.skip('object to query', async () => {
         
@@ -239,6 +234,7 @@ describe('automated object test', () => {
 
     /**
      * @toReview
+     * @error TypeError: (0 , axios_1.toFormData) is not a function
      */
     test.skip('object to form data', async () => {    
         

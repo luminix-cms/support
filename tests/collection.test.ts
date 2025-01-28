@@ -84,16 +84,6 @@ describe('automated collection test', () => {
         ]
     ]) as Collection<unknown[]>;
 
-    // const array_collection_2 = collect([
-    //     { name: 'iPhone 6', brand: 'Apple', type: 'phone', released: 2014 },
-    //     { name: 'iPhone 5', brand: 'Apple', type: 'phone', released: 2012 },
-    //     { name: 'Apple Watch', brand: 'Apple', type: 'watch', released: 2015 },
-    //     [
-    //         { name: 'Galaxy S6', brand: 'Samsung', type: 'phone', released: 2015 },
-    //         { name: 'Galaxy Gear', brand: 'Samsung', type: 'watch', released: 2013 },
-    //     ]
-    // ]) as Collection<unknown[]>;
-
     /* * * * */
 
     const string_collection_1 = collect([ 'foo', 'bar', 'baz' ]) as Collection<string>;
@@ -127,8 +117,6 @@ describe('automated collection test', () => {
         [ 4, 5, 6 ], 
         [ 7, 8, 9 ], 
     ]) as Collection<number[]>;
-
-    const array_of_number_collection_2 = collect([ [ 1, 2 ], [ 10, 20, 30 ] ]) as Collection<number[]>;
 
     /* * * * */
 
@@ -194,56 +182,45 @@ describe('automated collection test', () => {
         expect(result).toEqual(5);
     });
 
-    /**
-     * @toReview
-     */
-    test.skip('retrieve collection items by chunk', async () => {
+    test('retrieve collection items by chunk', async () => {
         const result = obj_collection_1.chunk(2);
 
         expect(result.toArray()).toEqual([
-            collect([
+            [
                 { name: 'iPhone 6', brand: 'Apple', type: 'phone', released: 2014 },
                 { name: 'iPhone 5', brand: 'Apple', type: 'phone', released: 2012 },
-            ]),
-            collect([
+            ],
+            [
                 { name: 'Apple Watch', brand: 'Apple', type: 'watch', released: 2015 },
                 { name: 'Galaxy S6', brand: 'Samsung', type: 'phone', released: 2015 },
-            ]),
-            collect([
+            ],
+            [
                 { name: 'Galaxy Gear', brand: 'Samsung', type: 'watch', released: 2013 },
-            ])
+            ]
         ]);
     });
 
-    /**
-     * @toReview
-     */
-    test.skip('retrieve collection items by chunk while condition', async () => {
-        const result = obj_collection_1.chunkWhile((_, index) => index < 3);
+    test('retrieve collection items by chunk while condition', async () => {
+        const result = obj_collection_1.chunkWhile((_, index) => index < 3 || index >= 4);
 
         expect(result.toArray()).toEqual([
-            collect([
+            [
                 { name: 'iPhone 6', brand: 'Apple', type: 'phone', released: 2014 },
                 { name: 'iPhone 5', brand: 'Apple', type: 'phone', released: 2012 },
-            ]),
-            collect([
                 { name: 'Apple Watch', brand: 'Apple', type: 'watch', released: 2015 },
-                { name: 'Galaxy S6', brand: 'Samsung', type: 'phone', released: 2015 },
-            ]),
-            collect([
+            ],
+            [
                 { name: 'Galaxy Gear', brand: 'Samsung', type: 'watch', released: 2013 },
-            ])
+            ]
         ]);
     });
 
-    /**
-     * @toReview
-     */
-    test.skip('retrieve collection items by nth chunk', async () => {
-        const result = obj_collection_1.nth(1, 1);
+    test('retrieve collection items by nth chunk', async () => {
+        const result = obj_collection_1.nth(2, 1);
 
         expect(result.toArray()).toEqual([
-            { name: 'Galaxy S6', brand: 'Samsung', type: 'phone', released: 2015 }
+            { name: 'iPhone 5', brand: 'Apple', type: 'phone', released: 2012 },
+            { name: 'Galaxy S6', brand: 'Samsung', type: 'phone', released: 2015 },
         ]);
     });
 
@@ -354,22 +331,22 @@ describe('automated collection test', () => {
         
         expect(result).toBe(true);
     });
-
+    
     test('retrieve collection with cross join', async () => {
-        const result = array_of_number_collection_2.crossJoin();
 
-        // expect(result.toArray()).toEqual([
-        //     [ 1, 10 ], 
-        //     [ 1, 20 ], 
-        //     [ 1, 30 ],
-        //     [ 2, 10 ], 
-        //     [ 2, 20 ],
-        //     [ 2, 30 ],
-        // ]);
-        expect(result.toArray()).toEqual([
-            [ 1, 2 ], 
-            [ 10, 20, 30 ], 
+        const arr = collect([ [ 'x', 'y' ], [ 1, 2 ] ]) as Collection<any[]>;
+
+        const result_1 = number_collection_0.crossJoin(number_collection_3);
+        const result_2 = arr.crossJoin();
+
+        expect(result_1.toArray()).toEqual([
+            [ 1, 20 ], [ 1, 30 ], [ 1, 40 ], 
+            [ 2, 20 ], [ 2, 30 ], [ 2, 40 ], 
+            [ 3, 20 ], [ 3, 30 ], [ 3, 40 ], 
+            [ 4, 20 ], [ 4, 30 ], [ 4, 40 ], 
+            [ 5, 20 ], [ 5, 30 ], [ 5, 40 ], 
         ]);
+        expect(result_2.toArray()).toEqual([ [ 'x', 'y' ], [ 1, 2 ] ]);
     });
 
     test('retrieve collections difference', async () => {
@@ -706,17 +683,20 @@ describe('automated collection test', () => {
         });
     });
 
-    /**
-     * @toReview
-     */
-    test.skip('retrieve collection items grouped by callback fn', async () => {
-        const result = obj_collection_1.groupBy((item) => ((item as Record<string, any>).released >= 2014) as never);
+    test('retrieve collection items grouped by callback fn', async () => {
+        const result = obj_collection_1.groupBy(
+            (item) => ((item as Record<string, any>).released >= 2014) as never
+        );
         
         expect(result).toEqual({ 
-            released: [
+            true: [
                 { name: 'iPhone 6', brand: 'Apple', type: 'phone', released: 2014 },
                 { name: 'Apple Watch', brand: 'Apple', type: 'watch', released: 2015 },
                 { name: 'Galaxy S6', brand: 'Samsung', type: 'phone', released: 2015 },
+            ],
+            false: [
+                { name: 'iPhone 5', brand: 'Apple', type: 'phone', released: 2012 },
+                { name: 'Galaxy Gear', brand: 'Samsung', type: 'watch', released: 2013 },
             ]
         });
     });
@@ -1325,10 +1305,7 @@ describe('automated collection test', () => {
         ]);
     });
 
-    /**
-     * @toReview
-     */
-    test.skip('retrieve collection sorted columns by', async () => {
+    test('retrieve collection sorted columns by', async () => {
         const result = array_collection_1.sortBy([
             ['released' as never, 'desc' as never], 
             ['released' as never, 'asc' as never], 
@@ -1337,8 +1314,8 @@ describe('automated collection test', () => {
         
         expect(result.toArray()).toEqual([
             [
-                { name: 'iPhone 5', brand: 'Apple', type: 'phone', released: 2012 },
                 { name: 'iPhone 6', brand: 'Apple', type: 'phone', released: 2014 },
+                { name: 'iPhone 5', brand: 'Apple', type: 'phone', released: 2012 },
             ],
             [
                 { name: 'Apple Watch', brand: 'Apple', type: 'watch', released: 2015 },
@@ -1398,24 +1375,19 @@ describe('automated collection test', () => {
         expect(result.toArray()).toEqual([ 1, 2.0, 3.333 ]);
     });
 
-    /**
-     * @toReview
-     */
-    test.skip('retrieve collection items take while', async () => {
-        const result = number_collection_1.takeWhile(3.333);
+    test('retrieve collection items take while', async () => {
+
+        const collection = collect([ 1, 1, 2, 1 ]);
+
+        const result = collection.takeWhile(1);
         
-        expect(result.toArray()).toEqual([ 1, 2.0, 4.567, 5.0005, 10 ]);
+        expect(result.toArray()).toEqual([ 1, 1 ]);
     });
 
-    /**
-     * @toReview
-     */
-    test.skip('retrieve collection items take while callback', async () => {
-        const result = number_collection_1.takeWhile((_, index) => {
-            return index % 2 === 0;
-        });
+    test('retrieve collection items take while callback', async () => {
+        const result = number_collection_1.takeWhile((number) => number < 5);
         
-        expect(result.toArray()).toEqual([ 1, 3.333, 5.0005 ]);
+        expect(result.toArray()).toEqual([ 1, 2.0, 3.333, 4.567 ]);
     });
 
     test('retrieve collection items transform', async () => {
@@ -1710,10 +1682,13 @@ describe('automated collection test', () => {
 
     /* * * * */
 
-    // test('retrieve collection dump', async () => {
-    //     const result = obj_collection_1.dump();
+    /**
+     * @dummy
+     */
+    test.skip('retrieve collection dump', async () => {
+        const result = obj_collection_1.dump();
 
-    //     expect(result).toEqual(console.log(obj_collection_1.toArray()));
-    // });
+        expect(result).toEqual(console.log(obj_collection_1.toArray()));
+    });
 
 });

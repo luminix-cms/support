@@ -7,7 +7,7 @@ beforeEach(() => {
 
 describe('automated array test', () => {
 
-    const array_0 = [
+    const array = [
         { name: 'iPhone 6', brand: 'Apple', type: 'phone', released: 2014 },
         { name: 'iPhone 5', brand: 'Apple', type: 'phone', released: 2012 },
         { name: 'Apple Watch', brand: 'Apple', type: 'watch', released: 2015 },
@@ -15,34 +15,22 @@ describe('automated array test', () => {
         { name: 'Galaxy Gear', brand: 'Samsung', type: 'watch', released: 2013 },
     ];
 
-    const array_1 = [ 1, 2 ];
-
-    const array_2 = [ 'foo', 'bar' ];
-
-    const array_3 = [ (x: number) => x + 1, (y: number) => y + 2 ];
-
     /* * * * */
 
     /**
      * @toReview
      */
     test.skip('calculate cartesian product of given arrays', async () => {
-        const arr = Arr.cartesian([ array_1, array_2, array_3 ]);
 
-        // expect(arr).toEqual([
-        //     [ 1, 'foo', (x: number) => x + 1 ],
-        //     [ 1, 'bar', (x: number) => x + 1 ],
-        //     [ 1, 'foo', (y: number) => y + 2 ],
-        //     [ 1, 'bar', (y: number) => y + 2 ],
-        //     [ 2, 'foo', (x: number) => x + 1 ],
-        //     [ 2, 'bar', (x: number) => x + 1 ],
-        //     [ 2, 'foo', (y: number) => y + 2 ],
-        //     [ 2, 'bar', (y: number) => y + 2 ],
-        // ]);
-        expect(arr).toBe([
-            [ 1, 2 ],
-            [ 'foo', 'bar' ],
-            [ (x: number) => x + 1, (y: number) => y + 2 ],
+        const array_1 = [ 'x', 'y', 'z' ];
+        const array_2 = [ 1, 2, 3 ];
+
+        const arr = Arr.cartesian([ array_1, array_2 ]);
+
+        expect(arr).toEqual([
+            [ 'x', 1 ], [ 'x', 2 ], [ 'x', 3 ],
+            [ 'y', 1 ], [ 'y', 2 ], [ 'y', 3 ],
+            [ 'z', 1 ], [ 'z', 2 ], [ 'z', 3 ],
         ]);
     });
 
@@ -50,7 +38,7 @@ describe('automated array test', () => {
      * @toReview
      */
     test.skip('gets an array of random elements', async () => {
-        const arr = Arr.sampleSize(array_0, 2);
+        const arr = Arr.sampleSize(array, 2);
 
         expect(arr).toEqual([
             { name: 'iPhone 6', brand: 'Apple', type: 'phone', released: 2014 },
@@ -65,7 +53,7 @@ describe('automated array test', () => {
      * @toReview
      */
     test.skip('returns a shuffled copy of the array', async () => {
-        const arr = Arr.shuffle(array_0);
+        const arr = Arr.shuffle(array);
 
         expect(arr).toContain([
             { name: 'iPhone 6', brand: 'Apple', type: 'phone', released: 2014 },

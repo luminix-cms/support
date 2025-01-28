@@ -41,6 +41,7 @@ describe('automated http client test', () => {
 
     /**
      * @toReview
+     * @error TypeError: (0 , axios_1.toFormData) is not a function
      */
     test.skip('make client form request', async () => {
 
@@ -202,6 +203,7 @@ describe('automated http client test', () => {
 
     /**
      * @toReview
+     * @error TypeError: (0 , axios_1.toFormData) is not a function
      */
     test.skip("make client with custom options", async () => {
 
@@ -489,10 +491,7 @@ describe('automated http client test', () => {
         expect(response.successful()).toBe(true);
     });
 
-    /**
-     * @toReview
-     */
-    test.skip("make client 'get' request", async () => {
+    test("make client 'get' request", async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -544,10 +543,7 @@ describe('automated http client test', () => {
         expect(response.json('user.id')).toBe(2);
     });
 
-    /**
-     * @toReview
-     */
-    test.skip("make client 'post' request validation", async () => {
+    test("make client 'post' request validation", async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -568,10 +564,7 @@ describe('automated http client test', () => {
         expect(isValidationError(response)).toBe(false);
     });
 
-    /**
-     * @toReview
-     */
-    test.skip("make client 'post' request validation error", async () => {
+    test("make client 'post' request validation error", async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({
@@ -594,10 +587,7 @@ describe('automated http client test', () => {
         expect(isValidationError(response)).toBe(true);
     });
 
-    /**
-     * @toReview
-     */
-    test.skip("make client 'put' request", async () => {
+    test("make client 'put' request", async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -624,10 +614,7 @@ describe('automated http client test', () => {
         expect(response.json('user.name')).toBe('test 3');
     });
 
-    /**
-     * @toReview
-     */
-    test.skip("make client 'patch' request", async () => {
+    test("make client 'patch' request", async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -654,10 +641,7 @@ describe('automated http client test', () => {
         expect(response.json('user.name')).toBe('test 3');
     });
 
-    /**
-     * @toReview
-     */
-    test.skip("make client 'delete' request", async () => {
+    test("make client 'delete' request", async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -683,10 +667,7 @@ describe('automated http client test', () => {
         expect(response.json('user')).toBeNull();
     });
 
-    /**
-     * @toReview
-     */
-    test.skip('client get request with error', async () => {
+    test("client 'get' request with error", async () => {
         
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.reject(new AxiosError(

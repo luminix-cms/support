@@ -25,10 +25,7 @@ describe('automated string test', () => {
         expect(Str.before(test_string_1, ',')).toBe('Lorem ipsum dolor sit amet');
     });
 
-    /**
-     * @toReview
-     */
-    test.skip('get character before last', async () => {
+    test('get character before last', async () => {
         expect(Str.beforeLast(test_string_1, 'r')).toBe('Loem ipsum dolo sit amet, consectetu');
     });
 
