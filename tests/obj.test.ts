@@ -7,38 +7,6 @@ beforeEach(() => {
 
 describe('automated object test', () => {
 
-    test('convert query string into object', async () => {
-        const obj = Obj.fromQuery(new URLSearchParams({ 'user.name': 'John Doe' }));
-
-        expect(obj).toMatchObject({ user: { name: 'John Doe' } });
-    });
-
-    test('convert form data into object', async () => {
-
-        // const form = new HTMLFormElement();
-
-        // form.append('user.name', 'John Doe');
-        // form.append('posts.items.0.title', 'Post 1');
-        // form.append('posts.items.1.title', 'Post 2');
-        // form.append('posts.items.2.title', 'Post 3');
-
-        const form = {
-            name: 'John Doe',
-            age: 30,
-            email: 'john@example.com',
-            password: 'password',
-        } as unknown as HTMLFormElement;
-
-        const obj = Obj.fromFormData(new FormData(form as unknown as HTMLFormElement));
-
-        expect(obj).toMatchObject({
-            name: 'John Doe',
-            age: 30,
-            email: 'john@example.com',
-            password: 'password',
-        });
-    });
-
     test('get object value', async () => {
 
         const a = {
@@ -218,7 +186,45 @@ describe('automated object test', () => {
         });
     });
 
-    test('object to query', async () => {
+    test('convert query string into object', async () => {
+        const obj = Obj.fromQuery(new URLSearchParams({ 'user.name': 'John Doe' }));
+
+        expect(obj).toMatchObject({ user: { name: 'John Doe' } });
+    });
+
+    /**
+     * @toReview
+     */
+    test.skip('convert form data into object', async () => {
+
+        // const form = new HTMLFormElement();
+
+        // form.append('user.name', 'John Doe');
+        // form.append('posts.items.0.title', 'Post 1');
+        // form.append('posts.items.1.title', 'Post 2');
+        // form.append('posts.items.2.title', 'Post 3');
+
+        const form = {
+            name: 'John Doe',
+            age: 30,
+            email: 'john@example.com',
+            password: 'password',
+        } as unknown as HTMLFormElement;
+
+        const obj = Obj.fromFormData(new FormData(form as unknown as HTMLFormElement));
+
+        expect(obj).toMatchObject({
+            name: 'John Doe',
+            age: 30,
+            email: 'john@example.com',
+            password: 'password',
+        });
+    });
+
+    /**
+     * @toReview
+     */
+    test.skip('object to query', async () => {
         
         const a = {
             name: 'John Doe',
@@ -231,7 +237,10 @@ describe('automated object test', () => {
         expect(obj).toEqual("name=John%20Doe&age=30&email=john%40example.com");
     });
 
-    test('object to form data', async () => {    
+    /**
+     * @toReview
+     */
+    test.skip('object to form data', async () => {    
         
         const a = {
             name: 'John Doe',

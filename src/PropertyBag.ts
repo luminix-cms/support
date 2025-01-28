@@ -72,6 +72,7 @@ class PropertyBag<T extends object> extends EventSource<PropertyBagEventMap<T>>
         if (typeof value !== 'object' || value === null) {
             throw new TypeError('Value must be an object');
         }
+        
         if (path === '.') {
             if (this.locked.some((item) => Obj.has(value, item))) {
                 throw new Error(`Cannot merge a path "${path}" that would override a locked path`);
@@ -90,6 +91,7 @@ class PropertyBag<T extends object> extends EventSource<PropertyBagEventMap<T>>
             });
             return;
         }
+
         const currentValue = this.get(path);
 
         if (typeof currentValue === 'object' && currentValue !== null) {
@@ -147,6 +149,5 @@ class PropertyBag<T extends object> extends EventSource<PropertyBagEventMap<T>>
     }
 
 }
-
 
 export default PropertyBag;

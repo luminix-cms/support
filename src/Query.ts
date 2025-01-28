@@ -9,6 +9,7 @@ export declare class QueryMacros {
 }
 
 class QueryStatic {
+
     fromObject(object: object): URLSearchParams {
         return Obj.toQuery(object);
     }
@@ -20,8 +21,8 @@ class QueryStatic {
     merge(...parts: (string | URLSearchParams)[]): URLSearchParams {
      
         const searchParams = new URLSearchParams();
+
         parts.forEach((part) => {
-    
             const params = typeof part === 'string'
                 ? new URLSearchParams(Str.after(part, '?'))
                 : part;
@@ -33,6 +34,7 @@ class QueryStatic {
     
         return searchParams;
     }
+
 }
 
 const Query = new (Macroable<QueryMacros, typeof QueryStatic>(QueryStatic))();

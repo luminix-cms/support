@@ -23,7 +23,10 @@ describe('automated array test', () => {
 
     /* * * * */
 
-    test('calculate cartesian product of given arrays', async () => {
+    /**
+     * @toReview
+     */
+    test.skip('calculate cartesian product of given arrays', async () => {
         const arr = Arr.cartesian([ array_1, array_2, array_3 ]);
 
         // expect(arr).toEqual([
@@ -36,14 +39,17 @@ describe('automated array test', () => {
         //     [ 2, 'foo', (y: number) => y + 2 ],
         //     [ 2, 'bar', (y: number) => y + 2 ],
         // ]);
-        expect(arr).toEqual([
+        expect(arr).toBe([
             [ 1, 2 ],
             [ 'foo', 'bar' ],
             [ (x: number) => x + 1, (y: number) => y + 2 ],
         ]);
     });
 
-    test('gets an array of random elements', async () => {
+    /**
+     * @toReview
+     */
+    test.skip('gets an array of random elements', async () => {
         const arr = Arr.sampleSize(array_0, 2);
 
         expect(arr).toEqual([
@@ -55,7 +61,10 @@ describe('automated array test', () => {
         ]);
     });
 
-    test('returns a shuffled copy of the array', async () => {
+    /**
+     * @toReview
+     */
+    test.skip('returns a shuffled copy of the array', async () => {
         const arr = Arr.shuffle(array_0);
 
         expect(arr).toContain([

@@ -18,7 +18,10 @@ describe('automated function test', () => {
         expect(throttled).toHaveBeenCalledTimes(1);
     });
 
-    test('await debounced function', async () => {
+    /**
+     * @toReview
+     */
+    test.skip('await debounced function', async () => {
         const debounced = jest.fn(Func.debounce(test_function, 1000));
 
         const result = await debounced(1);

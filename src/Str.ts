@@ -2,6 +2,7 @@ import {
     camelCase, lowerFirst, kebabCase, pad, padStart, padEnd, capitalize,
     startCase, upperFirst, snakeCase, trim,
 } from "lodash-es";
+
 import Macroable from "./Mixins/Macroable";
 
 export declare class StrMacros {
@@ -93,6 +94,7 @@ class StrStatic {
     upper(string: string): string {
         return string.toUpperCase();
     }
+    
 }
 
 const Str = new (Macroable<StrMacros, typeof StrStatic>(StrStatic))();
