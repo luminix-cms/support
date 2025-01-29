@@ -1,6 +1,7 @@
 {
   "name": "@luminix/support",
   "version": "",
+  "main": "dist/support.js",
   "module": "dist/support.js",
   "types": "types/index.d.ts",
   "type": "module",
