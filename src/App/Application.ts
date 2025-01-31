@@ -70,6 +70,17 @@ export default class Application<TContainers extends Record<string, any> = Recor
         };
     }
 
+    instance<K extends keyof TContainers>(abstract: K, instance: TContainers[K]): void
+    {
+        if (typeof abstract !== 'string') {
+            throw new TypeError('Service name must be a string.');
+        }
+        this.loaders[abstract] = {
+            loader: () => instance,
+            singleton: true
+        };
+    }
+
     make<K extends keyof TContainers & string>(abstract: K): TContainers[K]
     {
         const loader = this.loaders[abstract];
