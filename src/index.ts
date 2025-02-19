@@ -61,6 +61,6 @@ export type { RequestOptions } from './Http/Client';
 export type { MacroableOf, MacroableInterface } from './Mixins/Macroable';
 export type { HasFacadeAccessor, FacadeOf } from './Mixins/MakeFacade';
 export type { ReducibleInterface, ReducibleOf, ReducerCallback } from './Mixins/Reducible';
-export type { CollectionIteratorCallback } from './Collection';
+export type { CollectionIteratorCallback, CollectionChanged } from './Collection';
 export type { Constructor, TypeOf, JsonObject, JsonValue } from './Js';
 export type { PropertyBagEventMap } from './PropertyBag';
