@@ -114,7 +114,7 @@ export default function Reducible<TReducers extends ReducerMethodMap, TBase exte
         }
 
         clearReducer(name: string) {
-            this._reducers[name].splice(0, this._reducers[name].count());
+            !!this._reducers[name] && this._reducers[name].splice(0, this._reducers[name].count());
         }
 
         flushReducers() {
