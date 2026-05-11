@@ -1161,19 +1161,14 @@ describe('automated collection test', () => {
         ]);
     });
 
-    /**
-     * @toReview
-     */
-    test.skip('retrieve collection shuffle', async () => {
+    test('retrieve collection shuffle', async () => {
         const result = obj_collection_1.shuffle();
         
-        expect(result.toArray()).toContain([
-            { name: 'iPhone 6', brand: 'Apple', type: 'phone', released: 2014 },
-            { name: 'iPhone 5', brand: 'Apple', type: 'phone', released: 2012 },
-            { name: 'Apple Watch', brand: 'Apple', type: 'watch', released: 2015 },
-            { name: 'Galaxy S6', brand: 'Samsung', type: 'phone', released: 2015 },
-            { name: 'Galaxy Gear', brand: 'Samsung', type: 'watch', released: 2013 },
-        ]);
+        expect(result.toArray()).toContainEqual({ name: 'iPhone 6', brand: 'Apple', type: 'phone', released: 2014 });
+        expect(result.toArray()).toContainEqual({ name: 'iPhone 5', brand: 'Apple', type: 'phone', released: 2012 });
+        expect(result.toArray()).toContainEqual({ name: 'Apple Watch', brand: 'Apple', type: 'watch', released: 2015 });
+        expect(result.toArray()).toContainEqual({ name: 'Galaxy S6', brand: 'Samsung', type: 'phone', released: 2015 });
+        expect(result.toArray()).toContainEqual({ name: 'Galaxy Gear', brand: 'Samsung', type: 'watch', released: 2013 });
     });
 
     test('retrieve collection skip', async () => {
@@ -1682,13 +1677,14 @@ describe('automated collection test', () => {
 
     /* * * * */
 
-    /**
-     * @dummy
-     */
-    test.skip('retrieve collection dump', async () => {
-        const result = obj_collection_1.dump();
+    test('dump() calls console.log with the collection array', () => {
+        const spy = jest.spyOn(console, 'log').mockImplementation(() => {});
 
-        expect(result).toEqual(console.log(obj_collection_1.toArray()));
+        obj_collection_1.dump();
+
+        expect(spy).toHaveBeenCalledWith(obj_collection_1.toArray());
+
+        spy.mockRestore();
     });
 
     // --- change events ---

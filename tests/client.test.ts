@@ -43,7 +43,7 @@ describe('automated http client test', () => {
      * @toReview
      * @error TypeError: (0 , axios_1.toFormData) is not a function
      */
-    test.skip('make client form request', async () => {
+    test('make client form request', async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -65,7 +65,10 @@ describe('automated http client test', () => {
             url: '/test-post',
             method: 'post',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            data: { id: 2 }
+            data: ((data) => {
+                data.set('id', '2');
+                return data;
+            })(new FormData),
         });
 
         expect(response.successful()).toBe(true);
@@ -130,7 +133,7 @@ describe('automated http client test', () => {
     /**
      * @toReview
      */
-    test.skip("make client with custom headers", async () => {
+    test("make client with custom headers", async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -143,12 +146,12 @@ describe('automated http client test', () => {
 
         const client = new Client();
 
-        client.withHeaders({
-            'Accept': 'application/json', 
-            'Content-Type': 'application/x-www-form-urlencoded', 
-        });
-
-        const response = await client.post('/test-post', { id: 2 });
+        const response = await client
+            .withHeaders({
+                'Accept': 'application/json', 
+                'Content-Type': 'application/x-www-form-urlencoded', 
+            })
+            .post('/test-post', { id: 2 });
 
         expect(mockAxios).toHaveBeenCalledTimes(1);
         expect(mockAxios).toHaveBeenCalledWith({
@@ -158,7 +161,10 @@ describe('automated http client test', () => {
                 'Accept': 'application/json', 
                 'Content-Type': 'application/x-www-form-urlencoded', 
             },
-            data: { id: 2 }
+            data: ((data) => {
+                data.set('id', '2');
+                return data;
+            })(new FormData()),
         });
 
         expect(response.successful()).toBe(true);
@@ -205,7 +211,7 @@ describe('automated http client test', () => {
      * @toReview
      * @error TypeError: (0 , axios_1.toFormData) is not a function
      */
-    test.skip("make client with custom options", async () => {
+    test("make client with custom options", async () => {
 
         (mockAxios as any).mockClear();
         (mockAxios as any).mockImplementationOnce(() => Promise.resolve({ 
@@ -222,7 +228,7 @@ describe('automated http client test', () => {
             baseURL: 'http://test.com',
             headers: {
                 'Accept': 'application/json', 
-                'Content-Type': 'application/x-www-form-urlencoded', 
+                'Content-Type': 'application/json', 
             }, 
             data: { id: 2 }
         });
@@ -236,7 +242,7 @@ describe('automated http client test', () => {
             method: 'post',
             headers: { 
                 'Accept': 'application/json', 
-                'Content-Type': 'application/x-www-form-urlencoded', 
+                'Content-Type': 'application/json', 
             },
             data: { id: 2 }
         });

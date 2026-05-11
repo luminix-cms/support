@@ -192,61 +192,61 @@ describe('automated object test', () => {
         expect(obj).toMatchObject({ user: { name: 'John Doe' } });
     });
 
-    /**
-     * @toReview
-     * @error TypeError: Invalid constructor, the constructor is not part of the custom element registry
-     */
-    test.skip('convert form data into object', async () => {
+    test('convert form data into object', async () => {
 
-        const form = new HTMLFormElement();
+        const form = new FormData();
 
         form.append('name', 'John Doe');
         form.append('age', '30');
         form.append('email', 'john@example.com');
         form.append('password', 'password');
 
-        const obj = Obj.fromFormData(new FormData(form));
+        const obj = Obj.fromFormData(form);
 
         expect(obj).toMatchObject({
             name: 'John Doe',
-            age: 30,
+            age: '30',
             email: 'john@example.com',
             password: 'password',
         });
     });
 
-    /**
-     * @toReview
-     * @error TypeError: (0 , axios_1.toFormData) is not a function
-     */
-    test.skip('object to query', async () => {
+    test('object to query', async () => {
         
-        const a = {
+        const obj = Obj.toQuery({
             name: 'John Doe',
             age: 30,
             email: 'john@example.com',
-        };
-        
-        const obj = Obj.toQuery(a);
+            nested: {
+                foo: 'bar',
+                array: [10, 20],
+            }
+        });
 
-        expect(obj).toEqual("name=John%20Doe&age=30&email=john%40example.com");
+        expect(obj.toString()).toEqual("name=John+Doe&age=30&email=john%40example.com&nested%5Bfoo%5D=bar&nested%5Barray%5D%5B0%5D=10&nested%5Barray%5D%5B1%5D=20");
     });
 
-    /**
-     * @toReview
-     * @error TypeError: (0 , axios_1.toFormData) is not a function
-     */
-    test.skip('object to form data', async () => {    
-        
-        const a = {
+    test('object to form data', async () => {
+        const obj = Obj.toFormData({
             name: 'John Doe',
             age: 30,
             email: 'john@example.com',
-        };
-        
-        const obj = Obj.toFormData(a);
+            nested: {
+                foo: 'bar',
+                array: [10, 20],
+            }
+        });
 
-        expect(obj).toMatchObject(new FormData(a as unknown as HTMLFormElement));
+        const formData = new FormData();
+
+        formData.set('name', 'John Doe');
+        formData.set('age', '30');
+        formData.set('email', 'john@example.com');
+        formData.set('nested[foo]', 'bar');
+        formData.set('nested[array][0]', '10');
+        formData.set('nested[array][1]', '20');
+
+        expect(obj).toMatchObject(formData);
     });
 
 });

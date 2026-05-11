@@ -43,7 +43,7 @@ export default class Client {
     }
 
     withHeaders(headers: Record<string, string>): this {
-        Obj.set(this.options, 'headers', Obj.merge(this.options.headers, headers));
+        Obj.set(this.options, 'headers', Obj.merge(this.options.headers ?? {}, headers));
 
         return this;
     }
