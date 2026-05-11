@@ -66,16 +66,58 @@ describe('automated reducible tests', () => {
         const testClass = new (Reducible(TestReducedClass))();
 
         testClass.reducer('baz', jest.fn());
-        
+
         testClass.flushReducers();
 
         Object.keys(testClass._reducers).forEach((key) => {
             const reducer = testClass.getReducer(key);
-            
+
             expect(reducer.count()).toBe(0);
         });
 
         expect(testClass.baz(1)).toBe(1);
     });
-    
+
+    test('reducers run in ascending priority order', () => {
+        const order: number[] = [];
+        const testClass = new (Reducible(TestReducedClass))();
+
+        testClass.reducer('pipe', (v: number) => { order.push(30); return v; }, 30);
+        testClass.reducer('pipe', (v: number) => { order.push(10); return v; }, 10);
+        testClass.reducer('pipe', (v: number) => { order.push(20); return v; }, 20);
+
+        testClass.pipe(0);
+
+        expect(order).toEqual([10, 20, 30]);
+    });
+
+    test('reducer() returns an unsubscribe function that removes it', () => {
+        const fn = jest.fn((v: number) => v + 1);
+        const testClass = new (Reducible(TestReducedClass))();
+
+        const off = testClass.reducer('add', fn);
+
+        expect(testClass.add(0)).toBe(1);
+
+        off();
+
+        expect(testClass.add(0)).toBe(0);
+        expect(testClass.hasReducer('add')).toBe(false);
+    });
+
+    test('multiple reducers compose their transformations in sequence', () => {
+        const testClass = new (Reducible(TestReducedClass))();
+
+        testClass.reducer('transform', (v: number) => v + 1, 10);
+        testClass.reducer('transform', (v: number) => v * 2, 20);
+
+        expect(testClass.transform(3)).toBe(8);
+    });
+
+    test('reducer() throws ReducerOverrideException when name collides with an existing method', () => {
+        const testClass = new (Reducible(TestReducedClass))();
+
+        expect(() => testClass.reducer('foo', jest.fn())).toThrow();
+    });
+
 });

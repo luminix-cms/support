@@ -2,6 +2,7 @@ src/
 tests/
 .github/
 docs/
+.vscode/
 .eslintignore
 .eslintrc.cjs
 tsconfig.json

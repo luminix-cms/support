@@ -7,35 +7,44 @@ beforeEach(() => {
 
 describe('automated query test', () => {
 
-    /**
-     * @toReview
-     * @error TypeError: (0 , axios_1.toFormData) is not a function
-     */
-    test.skip('create query from object', async () => {
-        const query = Query.fromObject({ a: 1, b: 2 });
-        
-        expect(query).toEqual('a=1&b=2');
-    });
-
-    test('query string into object', async () => {
+    test('query URLSearchParams into object', () => {
         const query = Query.toObject(new URLSearchParams('a=1&b=2'));
-        
+
         expect(query).toEqual({ a: '1', b: '2' });
     });
 
-    /**
-     * @toReview
-     */
-    test('merge queries', async () => {
-        const merged = Query.merge(['?a=1&b=2', new URLSearchParams('c=3&d=4')] as any);
+    test('merge two query strings into one URLSearchParams', () => {
+        const merged = Query.merge('http://example.com?a=1&b=2', '?c=3&d=4');
+        const obj = Query.toObject(merged);
 
-        const query = Query.toObject(merged);
-        
-        // expect(merged).toEqual("a=1&b=2&c=3&d=4");
-        expect(query).toEqual({
-            0: "?a=1&b=2",
-            1: "c=3&d=4",
-        });
+        expect(obj).toEqual({ a: '1', b: '2', c: '3', d: '4' });
+    });
+
+    test('merge query string with URLSearchParams instance', () => {
+        const merged = Query.merge('http://example.com?a=1', new URLSearchParams('b=2&c=3'));
+        const obj = Query.toObject(merged);
+
+        expect(obj).toEqual({ a: '1', b: '2', c: '3' });
+    });
+
+    test('merge strips leading ? from string parts', () => {
+        const merged = Query.merge('?page=1', '?sort=name');
+        const obj = Query.toObject(merged);
+
+        expect(obj).toEqual({ page: '1', sort: 'name' });
+    });
+
+    test('merge with a later key overwrites an earlier one', () => {
+        const merged = Query.merge('?page=1', '?page=2');
+        const obj = Query.toObject(merged);
+
+        expect(obj).toEqual({ page: '2' });
+    });
+
+    test('merge with no arguments returns empty URLSearchParams', () => {
+        const merged = Query.merge();
+
+        expect(merged.toString()).toBe('');
     });
 
 });

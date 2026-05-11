@@ -161,7 +161,7 @@ describe('automated application test', () => {
         const app = new TestApp();
 
         app.withProviders([ TestProvider, AnotherTestProvider ]);
-        
+
         const a = jest.spyOn(TestProvider.prototype, 'flush');
         const b = jest.spyOn(AnotherTestProvider.prototype, 'flush');
 
@@ -170,6 +170,67 @@ describe('automated application test', () => {
 
         expect(a).toHaveBeenCalledTimes(1);
         expect(b).toHaveBeenCalledTimes(1);
+    });
+
+    test('instance() registers a pre-built object as singleton', () => {
+        const app = new TestApp();
+        const obj = new Subject();
+
+        app.instance('lorem', obj);
+
+        expect(app.make('lorem')).toBe(obj);
+        expect(app.make('lorem')).toBe(obj);
+    });
+
+    test('make() throws for an unbound service', () => {
+        const app = new TestApp();
+
+        expect(() => app.make('nonexistent')).toThrow("Service 'nonexistent' is not bound");
+    });
+
+    test('create() called twice does not re-run providers', () => {
+        const registerFn = jest.fn();
+
+        class OnceProvider extends ServiceProvider {
+            register() {
+                registerFn();
+                this.app.bind('guard-svc', () => new Subject());
+            }
+        }
+
+        const app = new TestApp();
+        app.withProviders([ OnceProvider ]);
+
+        app.create();
+        app.create();
+
+        expect(registerFn).toHaveBeenCalledTimes(1);
+    });
+
+    test('register() always runs before boot()', () => {
+        const order: string[] = [];
+
+        class OrderedProvider extends ServiceProvider {
+            register() { order.push('register'); }
+            boot()     { order.push('boot'); }
+        }
+
+        const app = new TestApp();
+        app.withProviders([ OrderedProvider, OrderedProvider ]);
+        app.create();
+
+        expect(order).toEqual(['register', 'register', 'boot', 'boot']);
+    });
+
+    test('flush() resets configuration and services', () => {
+        const app = new TestApp();
+        app.withConfiguration({ env: 'test' });
+        app.singleton('svc', () => new Subject());
+        app.create();
+        app.flush();
+
+        expect(app.configuration).toEqual({});
+        expect(() => app.make('svc')).toThrow();
     });
 
 });

@@ -1691,4 +1691,147 @@ describe('automated collection test', () => {
         expect(result).toEqual(console.log(obj_collection_1.toArray()));
     });
 
+    // --- change events ---
+
+    test('push() emits a change event with updated items', () => {
+        const col = collect([1, 2, 3]);
+        const handler = jest.fn();
+
+        col.on('change', handler);
+        col.push(4);
+
+        expect(handler).toHaveBeenCalledTimes(1);
+        expect(handler).toHaveBeenCalledWith(
+            expect.objectContaining({ items: [1, 2, 3, 4] })
+        );
+    });
+
+    test('pop() emits a change event', () => {
+        const col = collect([1, 2, 3]);
+        const handler = jest.fn();
+
+        col.on('change', handler);
+        col.pop();
+
+        expect(handler).toHaveBeenCalledTimes(1);
+        expect(handler).toHaveBeenCalledWith(
+            expect.objectContaining({ items: [1, 2] })
+        );
+    });
+
+    test('shift() emits a change event', () => {
+        const col = collect([1, 2, 3]);
+        const handler = jest.fn();
+
+        col.on('change', handler);
+        col.shift();
+
+        expect(handler).toHaveBeenCalledTimes(1);
+        expect(handler).toHaveBeenCalledWith(
+            expect.objectContaining({ items: [2, 3] })
+        );
+    });
+
+    test('prepend() emits a change event', () => {
+        const col = collect([2, 3]);
+        const handler = jest.fn();
+
+        col.on('change', handler);
+        col.prepend(1);
+
+        expect(handler).toHaveBeenCalledTimes(1);
+        expect(handler).toHaveBeenCalledWith(
+            expect.objectContaining({ items: [1, 2, 3] })
+        );
+    });
+
+    test('forget() emits a change event', () => {
+        const col = collect([10, 20, 30]);
+        const handler = jest.fn();
+
+        col.on('change', handler);
+        col.forget(1);
+
+        expect(handler).toHaveBeenCalledTimes(1);
+        expect(handler).toHaveBeenCalledWith(
+            expect.objectContaining({ items: [10, 30] })
+        );
+    });
+
+    test('pull() emits a change event', () => {
+        const col = collect([10, 20, 30]);
+        const handler = jest.fn();
+
+        col.on('change', handler);
+        col.pull(1);
+
+        expect(handler).toHaveBeenCalledTimes(1);
+        expect(handler).toHaveBeenCalledWith(
+            expect.objectContaining({ items: [10, 30] })
+        );
+    });
+
+    test('put() emits a change event', () => {
+        const col = collect([10, 20, 30]);
+        const handler = jest.fn();
+
+        col.on('change', handler);
+        col.put(1, 99);
+
+        expect(handler).toHaveBeenCalledTimes(1);
+        expect(handler).toHaveBeenCalledWith(
+            expect.objectContaining({ items: [10, 99, 30] })
+        );
+    });
+
+    test('splice() emits a change event', () => {
+        const col = collect([1, 2, 3, 4]);
+        const handler = jest.fn();
+
+        col.on('change', handler);
+        col.splice(1, 2);
+
+        expect(handler).toHaveBeenCalledTimes(1);
+        expect(handler).toHaveBeenCalledWith(
+            expect.objectContaining({ items: [1, 4] })
+        );
+    });
+
+    test('transform() emits a change event', () => {
+        const col = collect([1, 2, 3]);
+        const handler = jest.fn();
+
+        col.on('change', handler);
+        col.transform((n) => (n as number) * 10);
+
+        expect(handler).toHaveBeenCalledTimes(1);
+        expect(handler).toHaveBeenCalledWith(
+            expect.objectContaining({ items: [10, 20, 30] })
+        );
+    });
+
+    test('non-mutating methods do not emit change events', () => {
+        const col = collect([1, 2, 3]);
+        const handler = jest.fn();
+
+        col.on('change', handler);
+
+        col.map(n => n);
+        col.filter(() => true);
+        col.sort();
+        col.reverse();
+
+        expect(handler).not.toHaveBeenCalled();
+    });
+
+    test('change event source points to the collection itself', () => {
+        const col = collect([1]);
+        let capturedSource: unknown = null;
+
+        col.on('change', (e) => { capturedSource = e.source; });
+        col.push(2);
+
+        expect(capturedSource).toBe(col);
+    });
+
 });
