@@ -5,6 +5,7 @@
   "module": "dist/support.js",
   "types": "types/index.d.ts",
   "type": "module",
+  "repository": "luminix-cms/support",
   "scripts": {
     "prebuild": "rm -rf types",
     "build": "tsc && vite build",
