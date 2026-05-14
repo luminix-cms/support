@@ -18,6 +18,7 @@ export declare class ApplicationInterface<TContainers extends Record<string, any
     loadConfiguration(): void;
     bind<K extends keyof TContainers>(abstract: K, concrete: () => TContainers[K]): void;
     singleton<K extends keyof TContainers>(abstract: K, concrete: () => TContainers[K]): void;
+    has(abstract: string): boolean;
     make<K extends keyof TContainers & string>(abstract: K): TContainers[K];
     withConfiguration(configuration: Record<string, any>): this;
     withProviders(providers: (typeof ServiceProviderInterface)[]): this;

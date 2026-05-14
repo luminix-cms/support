@@ -81,6 +81,11 @@ export default class Application<TContainers extends Record<string, any> = Recor
         };
     }
 
+    has(abstract: string): boolean
+    {
+        return abstract in this.loaders;
+    }
+
     make<K extends keyof TContainers & string>(abstract: K): TContainers[K]
     {
         const loader = this.loaders[abstract];

@@ -96,6 +96,9 @@ app.singleton('http', () => new Client());
 // Instância pré-construída
 app.instance('http', clientExistente);
 
+// Verifica se um serviço está registrado
+app.has('http'); // true ou false
+
 // Resolução
 const http = app.make('http');
 ```

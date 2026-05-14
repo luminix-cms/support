@@ -188,6 +188,42 @@ describe('automated application test', () => {
         expect(() => app.make('nonexistent')).toThrow("Service 'nonexistent' is not bound");
     });
 
+    test('has() returns true for a bound service', () => {
+        const app = new TestApp();
+        app.bind('lorem', () => new Subject());
+
+        expect(app.has('lorem')).toBe(true);
+    });
+
+    test('has() returns true for a singleton', () => {
+        const app = new TestApp();
+        app.singleton('lorem', () => new Subject());
+
+        expect(app.has('lorem')).toBe(true);
+    });
+
+    test('has() returns true for an instance', () => {
+        const app = new TestApp();
+        app.instance('lorem', new Subject());
+
+        expect(app.has('lorem')).toBe(true);
+    });
+
+    test('has() returns false for an unregistered name', () => {
+        const app = new TestApp();
+
+        expect(app.has('nonexistent')).toBe(false);
+    });
+
+    test('has() returns false after flush()', () => {
+        const app = new TestApp();
+        app.bind('lorem', () => new Subject());
+        app.create();
+        app.flush();
+
+        expect(app.has('lorem')).toBe(false);
+    });
+
     test('create() called twice does not re-run providers', () => {
         const registerFn = jest.fn();
 
