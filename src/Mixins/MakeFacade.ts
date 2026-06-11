@@ -31,7 +31,19 @@ export default function MakeFacade<TService extends object, TBase extends HasFac
                         throw new Error(`Service ${String(accessor)} does not exist.`);
                     }
 
-                    return Reflect.get(service, prop, service);
+                    const value = Reflect.get(service, prop, service);
+
+                    // Bind methods to the service so `this` inside them is the
+                    // service instance, not the facade proxy. Otherwise property
+                    // assignments like `this.foo = bar` inside a service method
+                    // would land on the facade object instead of the service.
+                    // Own properties are left untouched: functions stored as
+                    // data (e.g. registered callbacks) must keep their identity.
+                    if (typeof value === 'function' && !Object.prototype.hasOwnProperty.call(service, prop)) {
+                        return value.bind(service);
+                    }
+
+                    return value;
                 }
             });
         }

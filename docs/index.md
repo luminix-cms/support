@@ -676,6 +676,8 @@ Http.get('/usuarios');
 Http.post('/usuarios', { nome: 'Alice' });
 ```
 
+Os métodos acessados pela facade são vinculados (`bind`) à instância do serviço: dentro do método, `this` é sempre o serviço resolvido do container, mesmo quando a chamada ocorre através da facade. Assim, métodos que gravam estado (`this.foo = ...`) escrevem no serviço — visível também para quem o resolve diretamente via `app.make()`. Funções armazenadas como propriedades de dado (ex.: callbacks registrados) são retornadas sem vínculo, preservando sua identidade.
+
 ---
 
 ## Utilitários
