@@ -47,6 +47,11 @@ class StatefulService {
         return this.callback;
     }
 
+    withCallback(callback: () => void): this {
+        this.callback = callback;
+        return this;
+    }
+
 }
 
 class StatefulFacadeClass implements HasFacadeAccessor {
@@ -65,6 +70,29 @@ class StatefulServiceProvider extends ServiceProvider {
 }
 
 type AppContainers = { 'test': TestService, 'stateful': StatefulService };
+
+// Mirrors the `App` facade in @luminix/core: the accessor is the application
+// object itself, and `down`/`setInstance` exist only on the facade.
+class AppLikeFacadeClass implements HasFacadeAccessor {
+
+    protected app?: Application<AppContainers>;
+
+    getFacadeAccessor(): string | object {
+        if (!this.app) {
+            this.app = new Application<AppContainers>([StatefulServiceProvider]);
+        }
+
+        return this.app;
+    }
+
+    down() {
+        if (this.app) {
+            this.app.flush();
+            delete this.app;
+        }
+    }
+
+}
 
 describe('automated facade test', () => {
 
@@ -109,6 +137,47 @@ describe('automated facade test', () => {
 
         expect(Stateful.getCallback()).toBe(custom);
         expect(Stateful.callback).toBe(custom);
+    });
+
+    test('fluent service methods keep the chain on the facade', () => {
+        const testApp = new Application<AppContainers>([ StatefulServiceProvider ]);
+        const Stateful = MakeFacade<StatefulService, StatefulFacadeClass>(StatefulFacadeClass, testApp);
+
+        testApp.create();
+
+        const custom = jest.fn();
+        const result = Stateful.withCallback(custom);
+
+        // `return this` inside the service must resolve to the facade when
+        // called through it, so facade-only members stay reachable in chains.
+        expect(result).toBe(Stateful);
+
+        // ...while the state still lands on the service instance.
+        expect(testApp.make('stateful').callback).toBe(custom);
+    });
+
+    test('object-accessor facade keeps facade-only methods reachable after fluent calls', () => {
+        const AppLike = MakeFacade<Application<AppContainers>, AppLikeFacadeClass>(AppLikeFacadeClass);
+
+        // Simulates @luminix/react LuminixProvider under React dev/StrictMode:
+        // the effect runs, is cleaned up (`down`), then runs again.
+        const app1 = AppLike.withProviders([]);
+
+        expect(app1).toBe(AppLike);
+
+        app1.create();
+
+        expect(app1.has('stateful')).toBe(true);
+
+        expect(() => app1.down()).not.toThrow();
+
+        const app2 = AppLike.withProviders([]);
+
+        app2.create();
+
+        // A fresh application was created after `down()`.
+        expect(app2.has('stateful')).toBe(true);
+        expect(app2.make('stateful').callback).toBeNull();
     });
 
 });

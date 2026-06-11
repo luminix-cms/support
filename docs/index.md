@@ -676,7 +676,7 @@ Http.get('/usuarios');
 Http.post('/usuarios', { nome: 'Alice' });
 ```
 
-Os métodos acessados pela facade são vinculados (`bind`) à instância do serviço: dentro do método, `this` é sempre o serviço resolvido do container, mesmo quando a chamada ocorre através da facade. Assim, métodos que gravam estado (`this.foo = ...`) escrevem no serviço — visível também para quem o resolve diretamente via `app.make()`. Funções armazenadas como propriedades de dado (ex.: callbacks registrados) são retornadas sem vínculo, preservando sua identidade.
+Os métodos acessados pela facade são invocados com `this` vinculado à instância do serviço: dentro do método, `this` é sempre o serviço resolvido do container, mesmo quando a chamada ocorre através da facade. Assim, métodos que gravam estado (`this.foo = ...`) escrevem no serviço — visível também para quem o resolve diretamente via `app.make()`. Métodos fluentes (que retornam `this`) devolvem a própria facade quando chamados através dela: a cadeia permanece na facade, mantendo acessíveis membros que existem apenas nela (ex.: `App.withProviders([...]).down()`, onde `down` é definido na classe da facade, não na `Application`). Funções armazenadas como propriedades de dado (ex.: callbacks registrados) são retornadas sem vínculo, preservando sua identidade.
 
 ---
 

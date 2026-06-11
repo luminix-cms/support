@@ -16,7 +16,7 @@ export default function MakeFacade<TService extends object, TBase extends HasFac
             super();
 
             return new Proxy(this, {
-                get(target, prop) {
+                get(target, prop, receiver) {
                     if (Reflect.has(target, prop)) {
                         return Reflect.get(target, prop);
                     }
@@ -33,14 +33,22 @@ export default function MakeFacade<TService extends object, TBase extends HasFac
 
                     const value = Reflect.get(service, prop, service);
 
-                    // Bind methods to the service so `this` inside them is the
-                    // service instance, not the facade proxy. Otherwise property
-                    // assignments like `this.foo = bar` inside a service method
-                    // would land on the facade object instead of the service.
+                    // Invoke methods with `this` bound to the service instance,
+                    // not the facade proxy. Otherwise property assignments like
+                    // `this.foo = bar` inside a service method would land on
+                    // the facade object instead of the service.
+                    // Fluent methods (`return this`) resolve back to the facade,
+                    // so chains keep facade-only members reachable — e.g.
+                    // `App.withProviders(...).down()` where `down` exists only
+                    // on the facade class.
                     // Own properties are left untouched: functions stored as
                     // data (e.g. registered callbacks) must keep their identity.
                     if (typeof value === 'function' && !Object.prototype.hasOwnProperty.call(service, prop)) {
-                        return value.bind(service);
+                        return function (...args: unknown[]) {
+                            const result = value.apply(service, args);
+
+                            return result === service ? receiver : result;
+                        };
                     }
 
                     return value;
