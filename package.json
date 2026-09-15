@@ -9,6 +9,7 @@
   "scripts": {
     "prebuild": "rm -rf types",
     "build": "tsc && vite build",
+    "postbuild": "cp -R agents/. dist/",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --report-unused-disable-directives --max-warnings 0 --fix",
     "test": "jest",
